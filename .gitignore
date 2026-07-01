@@ -1,0 +1,8 @@
+# Private / local-only — never publish
+build.sh
+outreach.md
+projects/
+.claude/
+.DS_Store
+*.backup.html
+scratchpad/

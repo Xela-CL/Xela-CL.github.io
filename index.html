@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex — AI Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #09090f;
+            --bg2: #111118;
+            --bg3: #1a1a24;
+            --accent: #818cf8;
+            --accent2: #6366f1;
+            --text: #f8fafc;
+            --text2: #94a3b8;
+            --text3: #64748b;
+            --border: rgba(255,255,255,0.08);
+            --green: #34d399;
+        }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        a { color: inherit; text-decoration: none; }
+
+        /* ── REVEAL ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(36px);
+            transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+        }
+        .reveal.visible { opacity: 1; transform: none; }
+        [data-delay="1"] { transition-delay: 0.08s; }
+        [data-delay="2"] { transition-delay: 0.18s; }
+        [data-delay="3"] { transition-delay: 0.28s; }
+        [data-delay="4"] { transition-delay: 0.38s; }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.25rem 2.5rem;
+            background: transparent;
+            border-bottom: 1px solid transparent;
+            transition: background 0.5s, backdrop-filter 0.5s, border-color 0.5s;
+        }
+        nav.scrolled {
+            background: rgba(9,9,15,0.88);
+            backdrop-filter: blur(20px);
+            border-bottom-color: var(--border);
+        }
+        .nav-logo { font-weight: 700; font-size: 1.1rem; letter-spacing: -0.02em; }
+        .nav-logo span { color: var(--accent); }
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.6rem 1.25rem; border-radius: 8px;
+            font-size: 0.875rem; font-weight: 600;
+            cursor: pointer; transition: all 0.15s; border: none; font-family: inherit;
+        }
+        .btn-primary { background: var(--accent2); color: white; }
+        .btn-primary:hover { background: #4f52d9; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(99,102,241,0.3); }
+        .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center;
+            padding: 6rem 1.5rem 4rem;
+            position: relative; overflow: hidden;
+        }
+        .hero-glow {
+            position: absolute; width: 900px; height: 900px;
+            background: radial-gradient(circle, rgba(99,102,241,0.13) 0%, transparent 65%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            pointer-events: none; will-change: transform;
+        }
+        .hero-glow-2 {
+            position: absolute; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(192,132,252,0.07) 0%, transparent 70%);
+            top: 20%; left: 65%; pointer-events: none;
+        }
+        .badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.4rem 1rem; border-radius: 100px;
+            border: 1px solid rgba(99,102,241,0.3);
+            background: rgba(99,102,241,0.08);
+            color: var(--accent); font-size: 0.8rem; font-weight: 500;
+            margin-bottom: 2rem; position: relative;
+        }
+        .badge-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: var(--green); animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(52,211,153,0.5); }
+            50% { opacity:.8; box-shadow: 0 0 0 5px rgba(52,211,153,0); }
+        }
+        .hero h1 {
+            font-size: clamp(2.8rem, 7vw, 5.2rem);
+            font-weight: 800; letter-spacing: -0.045em; line-height: 1.04;
+            max-width: 840px; margin-bottom: 1.25rem; position: relative;
+        }
+        .hero h1 em {
+            font-style: normal;
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #818cf8 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: shimmer 4s linear infinite;
+        }
+        @keyframes shimmer { to { background-position: 200% center; } }
+        .hero p {
+            font-size: 1.2rem; color: var(--text2);
+            max-width: 540px; margin-bottom: 2.5rem; line-height: 1.75; position: relative;
+        }
+        .hero-cta { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; position: relative; }
+        .hero-cta .btn { padding: 0.9rem 1.85rem; font-size: 1rem; }
+        .hero-stats {
+            display: flex; gap: 3.5rem;
+            margin-top: 5rem; padding-top: 2.5rem;
+            border-top: 1px solid var(--border); position: relative;
+        }
+        .stat-item { text-align: center; }
+        .stat-num { font-size: 1.85rem; font-weight: 700; letter-spacing: -0.03em; }
+        .stat-label { font-size: 0.78rem; color: var(--text3); margin-top: 0.25rem; }
+
+        /* ── SECTION ── */
+        .section-wrap { padding: 7rem 2.5rem; max-width: 1200px; margin: 0 auto; }
+        .section-label {
+            font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
+            text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem;
+        }
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 800; letter-spacing: -0.04em; line-height: 1.08; margin-bottom: 0.75rem;
+        }
+        .section-sub { color: var(--text2); font-size: 1.05rem; max-width: 480px; line-height: 1.75; }
+
+        /* ── SERVICES ── */
+        .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-top: 3.5rem; }
+        .service-card {
+            background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 2.25rem;
+            transition: border-color 0.3s, transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s;
+        }
+        .service-card:hover { border-color: rgba(99,102,241,0.4); transform: translateY(-5px); box-shadow: 0 24px 64px rgba(99,102,241,0.08); }
+        .service-icon { width: 50px; height: 50px; border-radius: 12px; background: rgba(99,102,241,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.5rem; }
+        .service-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+        .service-card p { font-size: 0.875rem; color: var(--text2); line-height: 1.7; }
+        .service-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 1.5rem; }
+        .tag { padding: 0.2rem 0.55rem; border-radius: 6px; background: var(--bg3); color: var(--text3); font-size: 0.72rem; font-weight: 500; }
+
+        /* ── BOTS CINEMATIC SCROLL ── */
+        .bots-intro { padding: 7rem 2.5rem 1rem; max-width: 1200px; margin: 0 auto; }
+
+        .bots-scroll-wrapper { position: relative; height: 700vh; }
+        .bots-sticky {
+            position: sticky; top: 0; height: 100vh; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .bots-stage { position: absolute; inset: 0; }
+
+        .bot-panel {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 2rem 1.5rem;
+            opacity: 0; visibility: hidden;
+            transition: opacity .55s cubic-bezier(0.16,1,0.3,1), visibility .55s;
+        }
+        .bot-panel.active { opacity: 1; visibility: visible; }
+
+        .bot-tile {
+            width: 190px; height: 190px; border-radius: 46px;
+            background: radial-gradient(circle at 50% 32%, #17171f, #0b0b12 72%);
+            border: 1px solid rgba(255,255,255,0.09);
+            display: flex; align-items: center; justify-content: center;
+            position: relative; margin-bottom: 2.25rem;
+            box-shadow: 0 40px 90px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
+            transform: translateY(var(--tileY, 30px)) scale(var(--tileS, 0.82));
+            opacity: var(--tileO, 0);
+            will-change: transform, opacity;
+        }
+        .bot-tile::before {
+            content: ''; position: absolute; inset: -22%;
+            border-radius: 50%; background: var(--halo, #7c3aed);
+            filter: blur(58px); opacity: calc(var(--tileO, 0) * 0.55);
+            z-index: -1;
+        }
+        .bot-tile svg { width: 116px; height: 116px; }
+
+        .bot-role {
+            font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em;
+            text-transform: uppercase; color: var(--tint, var(--accent));
+            opacity: var(--headO, 0); transform: translateY(var(--headY, 10px));
+        }
+        .bot-name {
+            font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 800;
+            letter-spacing: -0.045em; line-height: 1; margin: 0.55rem 0 0; color: var(--text);
+            opacity: var(--headO, 0); transform: translateY(var(--headY, 10px));
+        }
+        .bot-desc {
+            font-size: 1.12rem; line-height: 1.7; color: var(--text2);
+            max-width: 540px; margin: 1.6rem 0 0;
+            opacity: var(--descO, 0); transform: translateY(var(--descY, -34px));
+        }
+        .bot-tags {
+            display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;
+            margin-top: 1.7rem;
+            opacity: var(--tagO, 0); transform: translateY(var(--tagY, -16px));
+        }
+
+        .bots-rail {
+            position: absolute; left: 2.75rem; top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; gap: 0.85rem; z-index: 6;
+        }
+        .bots-rail-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: rgba(255,255,255,0.16); transition: all .45s cubic-bezier(0.16,1,0.3,1);
+        }
+        .bots-rail-dot.active { background: var(--accent2); height: 28px; }
+
+        @media (max-width: 768px) {
+            .bots-scroll-wrapper { height: auto; }
+            .bots-sticky { position: relative; height: auto; display: block; padding: 1rem 0 3rem; }
+            .bots-stage { position: relative; inset: auto; }
+            .bot-panel {
+                position: relative; inset: auto; opacity: 1; visibility: visible;
+                padding: 3.5rem 1.5rem; border-top: 1px solid var(--border);
+            }
+            .bot-tile { opacity: 1; transform: none; width: 150px; height: 150px; border-radius: 38px; }
+            .bot-tile svg { width: 92px; height: 92px; }
+            .bot-role, .bot-name, .bot-desc, .bot-tags { opacity: 1; transform: none; }
+            .bots-rail { display: none; }
+        }
+
+        /* ── PROCESS STICKY ── */
+        .process-scroll-wrapper { position: relative; height: 290vh; background: var(--bg2); }
+        .process-sticky {
+            position: sticky; top: 0; height: 100vh;
+            display: flex; align-items: center;
+            padding: 0 2.5rem;
+            max-width: 1200px; margin: 0 auto;
+            gap: 8rem;
+        }
+        .process-left { flex: 0 0 280px; }
+        .process-section-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 2rem; }
+        .process-step-big {
+            font-size: 7rem; font-weight: 800; letter-spacing: -0.06em; line-height: 1;
+            background: linear-gradient(135deg, #818cf8, #c084fc);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            margin-bottom: 2rem;
+        }
+        .process-dots { display: flex; gap: 0.5rem; }
+        .process-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); transition: background 0.4s, transform 0.4s; }
+        .process-dot.active { background: var(--accent2); transform: scale(1.5); }
+        .process-right { flex: 1; position: relative; min-height: 280px; }
+        .process-step-item {
+            position: absolute; top: 50%; transform: translateY(calc(-50% + 24px));
+            opacity: 0;
+            transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1), transform 0.5s cubic-bezier(0.16,1,0.3,1);
+            pointer-events: none;
+        }
+        .process-step-item.active { opacity: 1; transform: translateY(-50%); pointer-events: auto; }
+        .process-step-title { font-size: clamp(2.5rem,4vw,3.5rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.08; margin-bottom: 1.25rem; }
+        .process-step-desc { font-size: 1.1rem; color: var(--text2); line-height: 1.75; max-width: 480px; }
+
+        /* ── FORM ── */
+        .form-section { padding: 7rem 2.5rem; max-width: 1200px; margin: 0 auto; }
+        .request-form { margin-top: 3rem; max-width: 680px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-field { display: flex; flex-direction: column; gap: 0.45rem; }
+        .form-full { grid-column: 1/-1; }
+        .form-field label { font-size: 0.8rem; font-weight: 500; color: var(--text2); }
+        .form-field input, .form-field textarea, .form-field select {
+            background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+            color: var(--text); font-family: inherit; font-size: 0.9rem;
+            padding: 0.75rem 1rem;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            outline: none; -webkit-appearance: none;
+        }
+        .form-field select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2364748b' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 1rem center;
+            background-color: var(--bg2); padding-right: 2.5rem; cursor: pointer;
+        }
+        .form-field input:focus, .form-field textarea:focus, .form-field select:focus {
+            border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+        }
+        .form-field textarea { resize: vertical; min-height: 130px; line-height: 1.65; }
+        .form-submit { display: flex; flex-direction: column; justify-content: flex-end; }
+        .form-submit .btn { width: 100%; justify-content: center; padding: 0.8rem 1rem; }
+        .form-success { display: none; padding: 3rem 0; }
+        .success-icon { width: 60px; height: 60px; border-radius: 50%; background: rgba(52,211,153,0.1); color: var(--green); font-size: 1.5rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
+        .form-success h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.4rem; letter-spacing: -0.02em; }
+        .form-success p { color: var(--text2); }
+
+        footer { text-align: center; padding: 2.5rem; border-top: 1px solid var(--border); color: var(--text3); font-size: 0.82rem; }
+        footer a { color: var(--accent); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .services-grid { grid-template-columns: 1fr; }
+            .process-scroll-wrapper { height: auto; }
+            .process-sticky { position: relative; height: auto; flex-direction: column; gap: 2rem; padding: 5rem 1.5rem; }
+            .process-step-item { position: relative; top: auto; transform: none; opacity: 1; }
+            .process-step-item.active { transform: none; }
+            .process-right { min-height: auto; }
+        }
+        @media (max-width: 640px) {
+            nav { padding: 1rem 1.25rem; }
+            .hero-stats { gap: 2rem; }
+            .hero-cta { flex-direction: column; width: 100%; max-width: 300px; }
+            .hero-cta .btn { justify-content: center; }
+            .section-wrap, .form-section, .bots-intro { padding-left: 1.25rem; padding-right: 1.25rem; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-full { grid-column: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<nav id="main-nav">
+    <div class="nav-logo">alex<span>.</span>ai</div>
+    <a href="#request" class="btn btn-primary">Start a project</a>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+    <div class="hero-glow" id="hero-glow"></div>
+    <div class="hero-glow-2"></div>
+    <div class="badge reveal"><span class="badge-dot"></span>Available for new projects · July 2026</div>
+    <h1 class="reveal" data-delay="1">I build <em>AI tools</em><br>that actually work.</h1>
+    <p class="reveal" data-delay="2">Custom AI assistants, automation pipelines, and trading tools — shipped in weeks, not months. Built by a trader who codes.</p>
+    <div class="hero-cta reveal" data-delay="3">
+        <a href="#request" class="btn btn-primary">Start a project →</a>
+        <a href="#work" class="btn btn-outline">See my work</a>
+    </div>
+    <div class="hero-stats reveal" data-delay="4">
+        <div class="stat-item">
+            <div class="stat-num" data-count="5" data-suffix="+">5+</div>
+            <div class="stat-label">AI systems shipped</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" data-count="97">97</div>
+            <div class="stat-label">Tests passing</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">2–4 wks</div>
+            <div class="stat-label">Typical delivery</div>
+        </div>
+    </div>
+</div>
+
+<!-- ── SERVICES ── -->
+<div class="section-wrap">
+    <div class="section-label reveal">Services</div>
+    <h2 class="section-title reveal" data-delay="1">Three things I do well</h2>
+    <p class="section-sub reveal" data-delay="2">Everything I build is yours — no black-box SaaS you depend on forever.</p>
+    <div class="services-grid">
+        <div class="service-card reveal" data-delay="1">
+            <div class="service-icon">🤖</div>
+            <h3>Private AI Assistants</h3>
+            <p>A custom AI that knows your business, your docs, and your workflows. Runs locally or on your server. Your data never leaves.</p>
+            <div class="service-tags"><span class="tag">RAG</span><span class="tag">Memory</span><span class="tag">Claude API</span><span class="tag">Local LLM</span></div>
+        </div>
+        <div class="service-card reveal" data-delay="2">
+            <div class="service-icon">⚡</div>
+            <h3>Automation Pipelines</h3>
+            <p>Replace manual, repetitive work with LLM-powered pipelines. Research, reporting, email drafting, data extraction — automated.</p>
+            <div class="service-tags"><span class="tag">Multi-agent</span><span class="tag">Scheduling</span><span class="tag">Webhooks</span><span class="tag">Telegram</span></div>
+        </div>
+        <div class="service-card reveal" data-delay="3">
+            <div class="service-icon">📈</div>
+            <h3>Trading Tools</h3>
+            <p>Signal bots, trade journal automation, market scanners, and AI research assistants built specifically for traders. I trade too.</p>
+            <div class="service-tags"><span class="tag">Binance API</span><span class="tag">TradingView Pine</span><span class="tag">Alerts</span><span class="tag">Backtesting</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ── BOTS CINEMATIC SCROLL ── -->
+<section class="bots-intro" id="work">
+    <div class="section-label reveal">Work</div>
+    <h2 class="section-title reveal" data-delay="1">Meet the builds</h2>
+    <p class="section-sub reveal" data-delay="2">Four AI systems I've shipped. Keep scrolling — each one steps forward and shows you what it does.</p>
+</section>
+
+<div class="bots-scroll-wrapper" id="bots-wrapper">
+    <div class="bots-sticky">
+        <div class="bots-rail">
+            <div class="bots-rail-dot active"></div>
+            <div class="bots-rail-dot"></div>
+            <div class="bots-rail-dot"></div>
+            <div class="bots-rail-dot"></div>
+        </div>
+        <div class="bots-stage">
+
+            <!-- JARVIS -->
+            <div class="bot-panel active" style="--tint:#a78bfa; --halo:#7c3aed;">
+                <div class="bot-tile"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="jL" x1="26" y1="4" x2="26" y2="50" gradientUnits="userSpaceOnUse"><stop stop-color="#c084fc"/><stop offset="1" stop-color="#7c3aed"/></linearGradient><mask id="jLm"><rect x="14" y="4" width="26" height="11" rx="5.5" fill="white"/><rect x="28" y="4" width="12" height="36" fill="white"/><path d="M28 40 Q28 50 20 50 Q11 50 11 42" stroke="white" stroke-width="12" stroke-linecap="round" fill="none"/></mask><filter id="jLf" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="52" height="52" fill="url(#jL)" mask="url(#jLm)" filter="url(#jLf)"/></svg></div>
+                <div class="bot-role">AI Assistant</div>
+                <h3 class="bot-name">Jarvis</h3>
+                <p class="bot-desc">Local-first AI assistant with 4 specialized agents — research, web, voice, and scheduling. Vector memory, RAG knowledge base, runs 100% offline.</p>
+                <div class="bot-tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Ollama</span><span class="tag">ChromaDB</span></div>
+            </div>
+
+            <!-- EDGE -->
+            <div class="bot-panel" style="--tint:#38bdf8; --halo:#0ea5e9;">
+                <div class="bot-tile"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="eLb" x1="8" y1="26" x2="22" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#7ee8ff"/><stop offset="1" stop-color="#38a0f0"/></linearGradient><linearGradient id="eLt" x1="22" y1="26" x2="48" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#2dd4bf"/><stop offset="1" stop-color="#059669"/></linearGradient><filter id="eLf" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(#eLf)"><polygon points="8,6 22,6 22,46 8,46" fill="url(#eLb)"/><polygon points="8,6 14,6 14,46 8,46" fill="white" opacity=".15"/><polygon points="22,6 46,6 40,16 22,16" fill="url(#eLt)"/><polygon points="22,22 40,22 34,32 22,32" fill="url(#eLt)"/><polygon points="22,36 46,36 40,46 22,46" fill="url(#eLt)"/></g></svg></div>
+                <div class="bot-role">Trading Bot</div>
+                <h3 class="bot-name">Edge</h3>
+                <p class="bot-desc">Algorithmic trading system: multi-timeframe confluence scanner, a Layer 2 risk engine with circuit breaker, and a live mission-control dashboard with Telegram alerts.</p>
+                <div class="bot-tags"><span class="tag">Python</span><span class="tag">Telegram</span><span class="tag">Risk Engine</span></div>
+            </div>
+
+            <!-- FLUX -->
+            <div class="bot-panel" style="--tint:#f0409a; --halo:#c0208e;">
+                <div class="bot-tile"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="fL" x1="26" y1="48" x2="40" y2="4" gradientUnits="userSpaceOnUse"><stop stop-color="#ff7a00"/><stop offset=".45" stop-color="#ff3d7f"/><stop offset="1" stop-color="#c040ff"/></linearGradient><mask id="fLm"><rect x="28" y="4" width="13" height="44" fill="white"/><rect x="28" y="4" width="19" height="11" rx="5.5" fill="white"/><rect x="28" y="23" width="14" height="10" rx="5" fill="white"/><rect x="7" y="19" width="19" height="9" rx="4.5" fill="white"/><rect x="10" y="31" width="16" height="9" rx="4.5" fill="white" opacity=".7"/><rect x="14" y="42" width="12" height="8" rx="4" fill="white" opacity=".45"/></mask><filter id="fLf" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="52" height="52" fill="url(#fL)" mask="url(#fLm)" filter="url(#fLf)"/></svg></div>
+                <div class="bot-role">Signal Bot</div>
+                <h3 class="bot-name">Flux</h3>
+                <p class="bot-desc">Crypto intraday signal bot on 15-minute bars. EMA200 trend gate, ATR-based stops, 2R targets. A built-in backtester refuses to go live on a negative edge.</p>
+                <div class="bot-tags"><span class="tag">Python</span><span class="tag">Binance</span><span class="tag">EMA · ATR</span></div>
+            </div>
+
+            <!-- ODDS -->
+            <div class="bot-panel" style="--tint:#818cf8; --halo:#6366f1;">
+                <div class="bot-tile"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="oL" x1="46" y1="8" x2="8" y2="46" gradientUnits="userSpaceOnUse"><stop stop-color="#a78bfa"/><stop offset=".6" stop-color="#7c3aed"/><stop offset="1" stop-color="#3b1d7a"/></linearGradient><filter id="oLf" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="oLd" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M13,39 A18,18 0 1 1 10,35" fill="none" stroke="url(#oL)" stroke-width="8" stroke-linecap="round" filter="url(#oLf)"/><circle cx="13" cy="39" r="4" fill="white" filter="url(#oLd)"/><text x="26" y="27" text-anchor="middle" dominant-baseline="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="800" font-size="17" fill="#b49eff" filter="url(#oLf)">%</text></svg></div>
+                <div class="bot-role">Research Bot</div>
+                <h3 class="bot-name">Odds</h3>
+                <p class="bot-desc">Polymarket prediction-market scanner. AI news-edge analysis surfaces mispriced contracts and fires Telegram alerts before the crowd catches up.</p>
+                <div class="bot-tags"><span class="tag">Python</span><span class="tag">Claude API</span><span class="tag">Polymarket</span></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ── PROCESS ── -->
+<div class="process-scroll-wrapper" id="process-wrapper">
+    <div class="process-sticky" id="process-sticky-inner">
+        <div class="process-left">
+            <div class="process-section-label">Process</div>
+            <div class="process-step-big" id="process-big-num">01</div>
+            <div class="process-dots">
+                <div class="process-dot active" id="dot-0"></div>
+                <div class="process-dot" id="dot-1"></div>
+                <div class="process-dot" id="dot-2"></div>
+            </div>
+        </div>
+        <div class="process-right">
+            <div class="process-step-item active" id="step-0">
+                <h3 class="process-step-title">Discovery<br>call</h3>
+                <p class="process-step-desc">30 minutes. Tell me what you need — I'll tell you if I can build it and what it'll cost. No commitment required.</p>
+            </div>
+            <div class="process-step-item" id="step-1">
+                <h3 class="process-step-title">Fixed<br>proposal</h3>
+                <p class="process-step-desc">Flat fee or hourly. Scope locked before I start. You approve everything before a line of code gets written.</p>
+            </div>
+            <div class="process-step-item" id="step-2">
+                <h3 class="process-step-title">Build +<br>handoff</h3>
+                <p class="process-step-desc">Weekly check-ins. You see it working before final delivery. Full code handoff — you own it forever, no subscriptions.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── FORM ── -->
+<div class="form-section" id="request">
+    <div class="section-label reveal">Get started</div>
+    <h2 class="section-title reveal" data-delay="1">Tell me what you need</h2>
+    <p class="section-sub reveal" data-delay="2">Describe your project. I'll reply within 24 hours with a quote.</p>
+    <form id="project-form" class="request-form reveal" data-delay="3"
+          action="https://formspree.io/f/REPLACE_WITH_YOUR_FORMSPREE_ID" method="POST">
+        <div class="form-grid">
+            <div class="form-field">
+                <label for="f-name">Your name</label>
+                <input type="text" id="f-name" name="name" placeholder="Alex Smith" required>
+            </div>
+            <div class="form-field">
+                <label for="f-email">Your email</label>
+                <input type="email" id="f-email" name="email" placeholder="alex@company.com" required>
+            </div>
+            <div class="form-field form-full">
+                <label for="f-desc">What do you want built?</label>
+                <textarea id="f-desc" name="description"
+                    placeholder="E.g. A bot that finds the best new recipes trending online and sends me a daily Telegram message with ingredients and prep time..." required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="f-budget">Budget</label>
+                <select id="f-budget" name="budget">
+                    <option value="under-1k">Under $1,000</option>
+                    <option value="1k-3k" selected>$1,000 – $3,000</option>
+                    <option value="3k-6k">$3,000 – $6,000</option>
+                    <option value="6k+">$6,000+</option>
+                </select>
+            </div>
+            <div class="form-field form-submit">
+                <button type="submit" class="btn btn-primary">Send request →</button>
+            </div>
+        </div>
+    </form>
+    <div id="form-success" class="form-success">
+        <div class="success-icon">✓</div>
+        <h3>Request received!</h3>
+        <p>I'll review your project and reply within 24 hours.</p>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 Alex · AI Developer · <a href="mailto:alex.mess2011@gmail.com">alex.mess2011@gmail.com</a></p>
+</footer>
+
+<script>
+(function () {
+
+    // ── Reveal on scroll ──────────────────────────────
+    const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    // ── Nav ───────────────────────────────────────────
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 50);
+        updateProcess();
+        updateBots();
+    }, { passive: true });
+
+    // ── Hero glow parallax ────────────────────────────
+    const heroGlow = document.getElementById('hero-glow');
+    window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        if (y < window.innerHeight * 1.5)
+            heroGlow.style.transform = `translate(-50%, calc(-50% + ${y * 0.2}px))`;
+    }, { passive: true });
+
+    // ── Counter animation ─────────────────────────────
+    function animateCount(el) {
+        const target = parseInt(el.dataset.count);
+        const suffix = el.dataset.suffix || '';
+        const dur = 1600; const t0 = performance.now();
+        const tick = (now) => {
+            const p = Math.min((now - t0) / dur, 1);
+            const ease = 1 - Math.pow(1 - p, 4);
+            el.textContent = Math.round(ease * target) + suffix;
+            if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+    }
+    const statsObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.querySelectorAll('[data-count]').forEach(animateCount);
+                statsObs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.6 });
+    const statsEl = document.querySelector('.hero-stats');
+    if (statsEl) statsObs.observe(statsEl);
+
+    // ── Bots cinematic scroll ─────────────────────────
+    const botsWrap = document.getElementById('bots-wrapper');
+    const botPanels = Array.from(document.querySelectorAll('.bot-panel'));
+    const botDots = Array.from(document.querySelectorAll('.bots-rail-dot'));
+    const NB = botPanels.length;
+    let lastBot = -1;
+    const bclamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const bsmooth = t => t * t * (3 - 2 * t);
+    const bseg = (sp, a, b) => bsmooth(bclamp((sp - a) / (b - a), 0, 1));
+    function updateBots() {
+        if (!botsWrap || window.innerWidth < 768) return;
+        const rect = botsWrap.getBoundingClientRect();
+        const scrollable = botsWrap.offsetHeight - window.innerHeight;
+        const progress = bclamp(-rect.top / scrollable, 0, 0.99999);
+        const segLen = 1 / NB;
+        let idx = Math.floor(progress / segLen);
+        if (idx >= NB) idx = NB - 1;
+        const sp = bclamp((progress - idx * segLen) / segLen, 0, 1);
+        if (idx !== lastBot) {
+            botPanels.forEach((p, i) => p.classList.toggle('active', i === idx));
+            botDots.forEach((d, i) => d.classList.toggle('active', i === idx));
+            lastBot = idx;
+        }
+        const p = botPanels[idx];
+        if (!p) return;
+        const tileP = bseg(sp, 0.00, 0.38);
+        const headP = bseg(sp, 0.12, 0.50);
+        const descP = bseg(sp, 0.40, 0.75);
+        const tagP  = bseg(sp, 0.60, 0.90);
+        p.style.setProperty('--tileO', tileP.toFixed(3));
+        p.style.setProperty('--tileS', (0.82 + 0.18 * tileP).toFixed(3));
+        p.style.setProperty('--tileY', (30 - 30 * tileP).toFixed(1) + 'px');
+        p.style.setProperty('--headO', headP.toFixed(3));
+        p.style.setProperty('--headY', (10 - 10 * headP).toFixed(1) + 'px');
+        p.style.setProperty('--descO', descP.toFixed(3));
+        p.style.setProperty('--descY', (-34 + 34 * descP).toFixed(1) + 'px');
+        p.style.setProperty('--tagO', tagP.toFixed(3));
+        p.style.setProperty('--tagY', (-16 + 16 * tagP).toFixed(1) + 'px');
+    }
+
+    // ── Process sticky ────────────────────────────────
+    const processWrapper = document.getElementById('process-wrapper');
+    const bigNum = document.getElementById('process-big-num');
+    const dots = [0,1,2].map(i => document.getElementById('dot-' + i));
+    const stepEls = [0,1,2].map(i => document.getElementById('step-' + i));
+    let lastStep = -1;
+    function updateProcess() {
+        if (!processWrapper || window.innerWidth < 768) return;
+        const rect = processWrapper.getBoundingClientRect();
+        const scrollable = processWrapper.offsetHeight - window.innerHeight;
+        const progress = Math.max(0, Math.min(0.9999, -rect.top / scrollable));
+        const active = Math.floor(progress * 3);
+        if (active === lastStep) return;
+        lastStep = active;
+        if (bigNum) bigNum.textContent = String(active + 1).padStart(2, '0');
+        dots.forEach((d,i) => d?.classList.toggle('active', i === active));
+        stepEls.forEach((s,i) => s?.classList.toggle('active', i === active));
+    }
+
+    // ── Smooth anchor scroll ──────────────────────────
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const target = document.querySelector(a.getAttribute('href'));
+            if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+        });
+    });
+
+    // ── Form ──────────────────────────────────────────
+    const form = document.getElementById('project-form');
+    const successEl = document.getElementById('form-success');
+    if (form) {
+        form.addEventListener('submit', async e => {
+            e.preventDefault();
+            const btn = form.querySelector('button[type="submit"]');
+            btn.textContent = 'Sending...'; btn.disabled = true;
+            try {
+                const res = await fetch(form.action, { method:'POST', body: new FormData(form), headers:{'Accept':'application/json'} });
+                if (res.ok) { form.style.display='none'; successEl.style.display='block'; }
+                else throw new Error();
+            } catch {
+                btn.textContent = 'Send request →'; btn.disabled = false;
+                alert('Something went wrong. Email alex.mess2011@gmail.com directly.');
+            }
+        });
+    }
+
+    updateProcess();
+    updateBots();
+    window.addEventListener('resize', () => { lastBot = -1; updateBots(); }, { passive: true });
+})();
+</script>
+
+</body>
+</html>
