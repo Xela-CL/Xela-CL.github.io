@@ -1,6 +1,7 @@
 # Private / local-only — never publish
 build.sh
 outreach.md
+getting-paid.md
 projects/
 .claude/
 .DS_Store

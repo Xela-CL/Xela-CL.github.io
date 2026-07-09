@@ -160,7 +160,7 @@
         /* ── BOTS CINEMATIC SCROLL ── */
         .bots-intro { padding: 7rem 2.5rem 1rem; max-width: 1200px; margin: 0 auto; }
 
-        .bots-scroll-wrapper { position: relative; height: 700vh; }
+        .bots-scroll-wrapper { position: relative; height: 875vh; }
         .bots-sticky {
             position: sticky; top: 0; height: 100vh; overflow: hidden;
             display: flex; align-items: center; justify-content: center;
@@ -337,7 +337,7 @@
     <div class="hero-glow-2"></div>
     <div class="badge reveal"><span class="badge-dot"></span>Available for new projects · July 2026</div>
     <h1 class="reveal" data-delay="1">I build <em>AI tools</em><br>that actually work.</h1>
-    <p class="reveal" data-delay="2">Custom AI assistants, automation pipelines, and trading tools — shipped in weeks, not months. Built by a trader who codes.</p>
+    <p class="reveal" data-delay="2">Custom trading tools, automations, and AI assistants — built by someone who actually trades. Shipped in weeks, not months, and you own the code.</p>
     <div class="hero-cta reveal" data-delay="3">
         <a href="#request" class="btn btn-primary">Start a project →</a>
         <a href="#work" class="btn btn-outline">See my work</a>
@@ -348,7 +348,7 @@
             <div class="stat-label">AI systems shipped</div>
         </div>
         <div class="stat-item">
-            <div class="stat-num" data-count="97">97</div>
+            <div class="stat-num" data-count="117">117</div>
             <div class="stat-label">Tests passing</div>
         </div>
         <div class="stat-item">
@@ -389,13 +389,14 @@
 <section class="bots-intro" id="work">
     <div class="section-label reveal">Work</div>
     <h2 class="section-title reveal" data-delay="1">Meet the builds</h2>
-    <p class="section-sub reveal" data-delay="2">Four AI systems I've shipped. Keep scrolling — each one steps forward and shows you what it does.</p>
+    <p class="section-sub reveal" data-delay="2">Five AI systems I've shipped. Keep scrolling — each one steps forward and shows you what it does.</p>
 </section>
 
 <div class="bots-scroll-wrapper" id="bots-wrapper">
     <div class="bots-sticky">
         <div class="bots-rail">
             <div class="bots-rail-dot active"></div>
+            <div class="bots-rail-dot"></div>
             <div class="bots-rail-dot"></div>
             <div class="bots-rail-dot"></div>
             <div class="bots-rail-dot"></div>
@@ -425,7 +426,7 @@
                 <div class="bot-tile"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="fL" x1="26" y1="48" x2="40" y2="4" gradientUnits="userSpaceOnUse"><stop stop-color="#ff7a00"/><stop offset=".45" stop-color="#ff3d7f"/><stop offset="1" stop-color="#c040ff"/></linearGradient><mask id="fLm"><rect x="28" y="4" width="13" height="44" fill="white"/><rect x="28" y="4" width="19" height="11" rx="5.5" fill="white"/><rect x="28" y="23" width="14" height="10" rx="5" fill="white"/><rect x="7" y="19" width="19" height="9" rx="4.5" fill="white"/><rect x="10" y="31" width="16" height="9" rx="4.5" fill="white" opacity=".7"/><rect x="14" y="42" width="12" height="8" rx="4" fill="white" opacity=".45"/></mask><filter id="fLf" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="52" height="52" fill="url(#fL)" mask="url(#fLm)" filter="url(#fLf)"/></svg></div>
                 <div class="bot-role">Signal Bot</div>
                 <h3 class="bot-name">Flux</h3>
-                <p class="bot-desc">Crypto intraday signal bot on 15-minute bars. EMA200 trend gate, ATR-based stops, 2R targets. A built-in backtester refuses to go live on a negative edge.</p>
+                <p class="bot-desc">Crypto signal bot on 1-hour bars. EMA200 trend gate, ATR-based trailing exits. A built-in backtester refuses to go live on a negative edge.</p>
                 <div class="bot-tags"><span class="tag">Python</span><span class="tag">Binance</span><span class="tag">EMA · ATR</span></div>
             </div>
 
@@ -436,6 +437,15 @@
                 <h3 class="bot-name">Odds</h3>
                 <p class="bot-desc">Polymarket prediction-market scanner. AI news-edge analysis surfaces mispriced contracts and fires Telegram alerts before the crowd catches up.</p>
                 <div class="bot-tags"><span class="tag">Python</span><span class="tag">Claude API</span><span class="tag">Polymarket</span></div>
+            </div>
+
+            <!-- KEEL -->
+            <div class="bot-panel" style="--tint:#2dd4bf; --halo:#0d9488;">
+                <div class="bot-tile"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="kL" x1="26" y1="4" x2="26" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#5eead4"/><stop offset="1" stop-color="#0d9488"/></linearGradient><filter id="kLf" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(#kLf)" stroke="url(#kL)" stroke-width="4.5" stroke-linecap="round"><circle cx="26" cy="10" r="4.5"/><path d="M26 15 V 44"/><path d="M16 23 H 36"/><path d="M9 30 A 17 17 0 0 0 43 30"/></g></svg></div>
+                <div class="bot-role">Investing Advisor</div>
+                <h3 class="bot-name">Keel</h3>
+                <p class="bot-desc">Long-term ETF advisor: VTI/VXUS/BND core, 200-day trend overlay, DCA and threshold rebalancing. Backtest honestly reported — the overlay cut drawdown but lagged buy-and-hold on return.</p>
+                <div class="bot-tags"><span class="tag">Python</span><span class="tag">Yahoo Finance</span><span class="tag">Backtesting</span></div>
             </div>
 
         </div>
@@ -461,7 +471,7 @@
             </div>
             <div class="process-step-item" id="step-1">
                 <h3 class="process-step-title">Fixed<br>proposal</h3>
-                <p class="process-step-desc">Flat fee or hourly. Scope locked before I start. You approve everything before a line of code gets written.</p>
+                <p class="process-step-desc">Fixed price, agreed up front. Scope locked in writing before I start. You approve everything before a line of code gets written.</p>
             </div>
             <div class="process-step-item" id="step-2">
                 <h3 class="process-step-title">Build +<br>handoff</h3>
@@ -490,7 +500,7 @@
             <div class="form-field form-full">
                 <label for="f-desc">What do you want built?</label>
                 <textarea id="f-desc" name="description"
-                    placeholder="E.g. A bot that finds the best new recipes trending online and sends me a daily Telegram message with ingredients and prep time..." required></textarea>
+                    placeholder="E.g. A bot that watches my three setups on the 15m, pings my Telegram with entry/stop/size, and logs every trade to a journal automatically..." required></textarea>
             </div>
             <div class="form-field">
                 <label for="f-budget">Budget</label>
