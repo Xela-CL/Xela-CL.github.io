@@ -191,6 +191,34 @@ section { padding: 64px 0; }
 .mini-cafe  { --m-bg: #faf3e3; --m-ink: #24301f; --m-mut: #6f7a63; --m-acc: #2f5d3f; --m-acc-ink: #faf3e3; --m-line: rgba(36, 48, 31, 0.14); }
 .mini-plumb { --m-bg: #1d3557; --m-ink: #f2f6fb; --m-mut: #9fb0c6; --m-acc: #ffd23f; --m-acc-ink: #1d3557; --m-line: rgba(242, 246, 251, 0.16); }
 
+/* ── Laptop frame + device duo ── */
+.laptop { width: 100%; filter: drop-shadow(0 26px 30px rgba(120, 80, 40, 0.28)); }
+.laptop-lid { width: calc(100% - 36px); margin: 0 auto; background: #1c1917; border-radius: 14px 14px 0 0; padding: 10px 10px 8px; position: relative; }
+.laptop-lid::before { content: ''; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); width: 3px; height: 3px; border-radius: 50%; background: #4a423b; }
+.laptop-screen { aspect-ratio: 16 / 10; border-radius: 7px; overflow: hidden; display: flex; flex-direction: column; background: var(--m-bg); color: var(--m-ink); }
+.laptop-base { height: 14px; background: linear-gradient(#4a423b, #26211d); border-radius: 3px 3px 16px 16px; position: relative; }
+.laptop-base::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 15%; height: 5px; background: #1c1917; border-radius: 0 0 8px 8px; }
+
+.demo-duo { position: relative; width: 100%; max-width: 620px; margin: 44px auto 0; }
+.demo-duo .phone { position: absolute; left: -14px; bottom: -8px; transform: scale(0.34); transform-origin: bottom left; }
+
+/* desktop-layout mini site (inside the laptop) */
+.mini-d-nav { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; border-bottom: 1px solid var(--m-line); }
+.mini-d-links { display: flex; gap: 14px; font-size: 8px; font-weight: 700; color: var(--m-mut); }
+.mini-d-hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 16px; align-items: center; padding: 12px 16px; }
+.mini-d-art { border-radius: 8px; aspect-ratio: 4 / 3; border: 1px solid var(--m-line); background: linear-gradient(135deg, var(--m-acc) 0%, transparent 140%); opacity: 0.35; }
+.mini-d-cols { display: none; grid-template-columns: 1fr 1fr; column-gap: 24px; margin: 0 18px; border-top: 1px solid var(--m-line); }
+.laptop-screen .mini-title { font-size: 13px; }
+.laptop-screen .mini-btn { margin-top: 8px; }
+.laptop-screen .mini-foot { display: none; }
+@media (min-width: 720px) {
+    .demo-duo .phone { transform: scale(0.5); left: -44px; }
+    .mini-d-hero { gap: 18px; padding: 16px 18px 14px; }
+    .mini-d-cols { display: grid; }
+    .laptop-screen .mini-title { font-size: 16px; }
+    .laptop-screen .mini-foot { display: block; padding: 10px 18px 12px; }
+}
+
 /* ── Pain cards ── */
 .pain-grid { display: grid; gap: 16px; margin-top: 30px; }
 .pain-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 24px; box-shadow: var(--shadow); }
@@ -420,7 +448,7 @@ footer a:hover { text-decoration: underline; }
             <div class="reveal">
                 <span class="sec-kicker">Demo designs</span>
                 <h2 class="sec-title">See what yours could look like.</h2>
-                <p class="sec-sub">Three demo designs we built to show the style — your site becomes the next one, and our founding clients get first pick of launch pricing.</p>
+                <p class="sec-sub">Three demo designs we built to show the style, on phones and on computers — your site becomes the next one, and our founding clients get first pick of launch pricing.</p>
             </div>
             <div class="demo-row">
                 <div class="demo-item reveal">
@@ -480,6 +508,55 @@ footer a:hover { text-decoration: underline; }
                     </div>
                     <p class="demo-cap"><strong>R. Dalton Plumbing</strong> a tradesperson<br><span class="demo-tag">Demo design</span></p>
                 </div>
+            </div>
+
+            <!-- ── Same site on a computer ── -->
+            <div class="demo-item reveal">
+                <div class="demo-duo" role="img" aria-label="Demo website for the café Butter &amp; Steam, shown on a laptop and a phone">
+                    <div class="laptop" aria-hidden="true">
+                        <div class="laptop-lid">
+                            <div class="laptop-screen mini-cafe">
+                                <div class="mini-d-nav">
+                                    <span class="mini-logo">BUTTER &amp; STEAM</span>
+                                    <span class="mini-d-links"><span>Menu</span><span>Hours</span><span>Find us</span></span>
+                                </div>
+                                <div class="mini-d-hero">
+                                    <div>
+                                        <div class="mini-kicker">Café · Brunch · Fresh bakes</div>
+                                        <div class="mini-title">Good coffee. Better brunch.</div>
+                                        <span class="mini-btn">See the menu</span>
+                                    </div>
+                                    <div class="mini-d-art"></div>
+                                </div>
+                                <div class="mini-d-cols">
+                                    <div class="mini-row"><span>Flat white</span><span>$4</span></div>
+                                    <div class="mini-row"><span>The big brunch</span><span>$14</span></div>
+                                    <div class="mini-row"><span>Cinnamon bun</span><span>$5</span></div>
+                                    <div class="mini-row"><span>Iced latte</span><span>$5</span></div>
+                                </div>
+                                <div class="mini-foot">Open 7–4 weekdays · 8–5 weekends</div>
+                            </div>
+                        </div>
+                        <div class="laptop-base"></div>
+                    </div>
+                    <div class="phone" aria-hidden="true">
+                        <div class="phone-screen mini-cafe">
+                            <div class="mini-nav"><span class="mini-logo">BUTTER &amp; STEAM</span><span class="mini-burger"></span></div>
+                            <div class="mini-hero">
+                                <div class="mini-kicker">Café · Brunch · Fresh bakes</div>
+                                <div class="mini-title">Good coffee. Better brunch.</div>
+                                <span class="mini-btn">See the menu</span>
+                            </div>
+                            <div class="mini-list">
+                                <div class="mini-row"><span>Flat white</span><span>$4</span></div>
+                                <div class="mini-row"><span>The big brunch</span><span>$14</span></div>
+                                <div class="mini-row"><span>Cinnamon bun</span><span>$5</span></div>
+                            </div>
+                            <div class="mini-foot">Open 7–4 weekdays · 8–5 weekends</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="demo-cap"><strong>Same site, big screen</strong> every design comes ready for phones and computers — nothing extra to pay<br><span class="demo-tag">Demo design</span></p>
             </div>
         </div>
     </section>
