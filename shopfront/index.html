@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Karla:wght@400;700&display=swap" rel="stylesheet">
+<noscript><style>.reveal { opacity: 1 !important; transform: none !important; }</style></noscript>
 <style>
 /* ─────────────────────────────────────────────────────────
    Shopfront Studio — single-file landing page.
@@ -200,7 +201,7 @@ section { padding: 64px 0; }
 .laptop-base::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 15%; height: 5px; background: #1c1917; border-radius: 0 0 8px 8px; }
 
 .demo-duo { position: relative; width: 100%; max-width: 620px; margin: 44px auto 0; }
-.demo-duo .phone { position: absolute; left: -14px; bottom: -8px; transform: scale(0.34); transform-origin: bottom left; }
+.demo-duo .phone { position: absolute; left: -14px; bottom: -8px; transform: translateY(var(--duo-shift, 0px)) scale(0.34); transform-origin: bottom left; }
 
 /* desktop-layout mini site (inside the laptop) */
 .mini-d-nav { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; border-bottom: 1px solid var(--m-line); }
@@ -212,7 +213,7 @@ section { padding: 64px 0; }
 .laptop-screen .mini-btn { margin-top: 8px; }
 .laptop-screen .mini-foot { display: none; }
 @media (min-width: 720px) {
-    .demo-duo .phone { transform: scale(0.5); left: -44px; }
+    .demo-duo .phone { transform: translateY(var(--duo-shift, 0px)) scale(0.5); left: -44px; }
     .mini-d-hero { gap: 18px; padding: 16px 18px 14px; }
     .mini-d-cols { display: grid; }
     .laptop-screen .mini-title { font-size: 16px; }
@@ -299,7 +300,7 @@ section { padding: 64px 0; }
 .faq-a { padding: 0 0 20px; color: var(--muted); font-size: 15.5px; max-width: 640px; }
 
 /* ── Contact ── */
-.contact { background: var(--card); border-top: 1px solid var(--border); }
+.contact { background: linear-gradient(180deg, var(--card) 55%, #fbeadb 100%); border-top: 1px solid var(--border); }
 .contact-head { text-align: center; }
 .contact-head .sec-sub { margin-left: auto; margin-right: auto; }
 .contact-card { background: var(--paper); border: 1px solid var(--border); border-radius: 24px; padding: 28px 24px; max-width: 620px; margin: 32px auto 0; }
@@ -335,6 +336,80 @@ footer { border-top: 1px solid var(--border); padding: 34px 20px; text-align: ce
 footer a { color: var(--accent-dark); font-weight: 700; text-decoration: none; }
 footer a:hover { text-decoration: underline; }
 
+/* ── Scroll flourishes ── */
+html, body { overflow-x: clip; }
+
+#scroll-progress {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    z-index: 60;
+    background: linear-gradient(90deg, var(--accent), #f0a36b);
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+.hero { position: relative; }
+.hero-bg { position: absolute; inset: -80px 0 0; pointer-events: none; z-index: -1; }
+.blob { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.55; }
+.b1 { width: 420px; height: 420px; background: #fbe3cf; top: -60px; right: -120px; animation: drift 16s ease-in-out infinite alternate; }
+.b2 { width: 320px; height: 320px; background: #f6d3b8; bottom: -40px; left: -140px; animation: drift 20s ease-in-out infinite alternate-reverse; }
+.b3 { width: 220px; height: 220px; background: #fdeee2; top: 30%; left: 42%; animation: drift 24s ease-in-out infinite alternate; }
+@keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(36px, 26px) scale(1.12); }
+}
+.hero-phone .phone { animation: bob 7s ease-in-out infinite; }
+@keyframes bob {
+    0%, 100% { transform: translateY(0) rotate(0.4deg); }
+    50% { transform: translateY(-12px) rotate(-0.6deg); }
+}
+
+/* ticker ribbon */
+.ticker { background: var(--ink); color: var(--paper); width: 104%; margin: 4px -2% -20px; padding: 13px 0; transform: rotate(-1.2deg); overflow: hidden; }
+.ticker-track { display: flex; width: max-content; animation: ticker 32s linear infinite; }
+.ticker-set { display: flex; align-items: center; gap: 30px; padding-right: 30px; }
+.ticker-set span { font-weight: 700; font-size: 14.5px; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+.ticker-set i { font-style: normal; color: #f0a36b; }
+@keyframes ticker { to { transform: translateX(-50%); } }
+
+/* card + phone hover lift */
+.pain-card, .price-card, .duo-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.pain-card:hover, .price-card:hover, .duo-card:hover { transform: translateY(-6px); box-shadow: 0 24px 44px -20px rgba(120, 80, 40, 0.35); }
+.demo-row .demo-item .phone { transition: opacity 0.55s ease, transform 0.45s ease; }
+.demo-row .demo-item:hover .phone { transform: translateY(-10px) rotate(-1.5deg); }
+
+/* section title underline sweep */
+.sec-title::after {
+    content: '';
+    display: block;
+    width: 58px; height: 4px;
+    border-radius: 2px;
+    margin-top: 14px;
+    background: linear-gradient(90deg, var(--accent), #f0a36b);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.7s 0.3s ease;
+}
+.t-center .sec-title::after { margin-left: auto; margin-right: auto; transform-origin: center; }
+.reveal.in .sec-title::after { transform: scaleX(1); }
+
+/* steps progress line (fills as you scroll) */
+.steps { position: relative; --sp: 0; }
+.steps::before, .steps::after { content: ''; position: absolute; left: 21px; top: 24px; bottom: 46px; width: 4px; border-radius: 2px; }
+.steps::before { background: var(--border); }
+.steps::after { background: linear-gradient(var(--accent), #f0a36b); transform: scaleY(var(--sp)); transform-origin: top; }
+.step-num { position: relative; z-index: 1; transition: background 0.4s ease, color 0.4s ease, box-shadow 0.4s ease; }
+.step.lit .step-num { background: var(--accent); color: #fff; box-shadow: 0 0 0 6px var(--accent-tint); }
+@media (min-width: 900px) {
+    .steps::before, .steps::after { left: 23px; right: calc(25% - 23px); top: 21px; bottom: auto; width: auto; height: 4px; }
+    .steps::after { transform: scaleX(var(--sp)); transform-origin: left; }
+}
+
+/* reveal variants */
+.reveal[data-r="pop"] { transform: translateY(12px) scale(0.94); }
+.reveal[data-r="tilt"] { transform: translateY(44px) rotate(var(--tilt, -5deg)) scale(0.96); }
+
 /* ── Reveal on scroll ── */
 .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
 .reveal.in { opacity: 1; transform: none; }
@@ -343,12 +418,16 @@ footer a:hover { text-decoration: underline; }
     html { scroll-behavior: auto; }
     .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
     .btn, .faq summary::after { transition: none !important; }
+    .blob, .hero-phone .phone, .ticker-track { animation: none !important; }
+    .sec-title::after, .steps::after { transform: none !important; transition: none !important; }
+    #scroll-progress { display: none; }
 }
 </style>
 </head>
 <body>
 
 <a class="skip" href="#main">Skip to content</a>
+<div id="scroll-progress" aria-hidden="true"></div>
 
 <header id="site-header">
     <div class="wrap header-inner">
@@ -373,21 +452,26 @@ footer a:hover { text-decoration: underline; }
 
     <!-- ── Hero ── -->
     <section class="hero" id="top">
+        <div class="hero-bg" aria-hidden="true">
+            <span class="blob b1"></span>
+            <span class="blob b2"></span>
+            <span class="blob b3"></span>
+        </div>
         <div class="wrap hero-grid">
-            <div>
-                <h1>A proper website for your business. Live in a week.</h1>
-                <p class="hero-sub">We build simple, good-looking websites for barbers, cafés, tradespeople and local shops — one fixed price, no monthly fees, no tech talk.</p>
-                <div class="hero-ctas">
+            <div data-stagger>
+                <h1 class="reveal">A proper website for your business. Live in a week.</h1>
+                <p class="hero-sub reveal">We build simple, good-looking websites for barbers, cafés, tradespeople and local shops — one fixed price, no monthly fees, no tech talk.</p>
+                <div class="hero-ctas reveal">
                     <a class="btn btn-primary" href="#contact">Get a free mockup</a>
                     <a class="btn btn-ghost" href="#prices">See prices</a>
                 </div>
-                <div class="chips">
+                <div class="chips reveal">
                     <span class="chip">Fixed price, agreed up front</span>
                     <span class="chip">No monthly fees</span>
                     <span class="chip">You own everything</span>
                 </div>
             </div>
-            <div class="hero-phone">
+            <div class="hero-phone reveal" data-r="pop">
                 <div class="phone" role="img" aria-label="Demo website design for a barbershop called Fade District">
                     <div class="phone-screen mini-fade" aria-hidden="true">
                         <div class="mini-nav"><span class="mini-logo">FADE DISTRICT</span><span class="mini-burger"></span></div>
@@ -409,6 +493,18 @@ footer a:hover { text-decoration: underline; }
         </div>
     </section>
 
+    <!-- ── Ticker ribbon ── -->
+    <div class="ticker" aria-hidden="true">
+        <div class="ticker-track">
+            <div class="ticker-set">
+                <span>Barbers</span><i>✦</i><span>Cafés</span><i>✦</i><span>Plumbers</span><i>✦</i><span>Gyms</span><i>✦</i><span>Salons</span><i>✦</i><span>Bakeries</span><i>✦</i><span>Electricians</span><i>✦</i><span>Florists</span><i>✦</i><span>Restaurants</span><i>✦</i><span>Corner shops</span><i>✦</i>
+            </div>
+            <div class="ticker-set">
+                <span>Barbers</span><i>✦</i><span>Cafés</span><i>✦</i><span>Plumbers</span><i>✦</i><span>Gyms</span><i>✦</i><span>Salons</span><i>✦</i><span>Bakeries</span><i>✦</i><span>Electricians</span><i>✦</i><span>Florists</span><i>✦</i><span>Restaurants</span><i>✦</i><span>Corner shops</span><i>✦</i>
+            </div>
+        </div>
+    </div>
+
     <!-- ── Pain ── -->
     <section>
         <div class="wrap">
@@ -416,7 +512,7 @@ footer a:hover { text-decoration: underline; }
                 <span class="sec-kicker">Sound familiar?</span>
                 <h2 class="sec-title">Your customers are looking for you online. What are they finding?</h2>
             </div>
-            <div class="pain-grid">
+            <div class="pain-grid" data-stagger>
                 <div class="pain-card reveal">
                     <div class="pain-icon" aria-hidden="true">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8.5 9.5l5 5M13.5 9.5l-5 5"/></svg>
@@ -450,9 +546,9 @@ footer a:hover { text-decoration: underline; }
                 <h2 class="sec-title">See what yours could look like.</h2>
                 <p class="sec-sub">Three demo designs we built to show the style, on phones and on computers — your site becomes the next one, and our founding clients get first pick of launch pricing.</p>
             </div>
-            <div class="demo-row">
+            <div class="demo-row" data-stagger>
                 <div class="demo-item reveal">
-                    <div class="phone">
+                    <div class="phone reveal" data-r="tilt" style="--tilt:-5deg">
                         <div class="phone-screen mini-fade" aria-hidden="true">
                             <div class="mini-nav"><span class="mini-logo">FADE DISTRICT</span><span class="mini-burger"></span></div>
                             <div class="mini-hero">
@@ -471,7 +567,7 @@ footer a:hover { text-decoration: underline; }
                     <p class="demo-cap"><strong>Fade District</strong> a barbershop<br><span class="demo-tag">Demo design</span></p>
                 </div>
                 <div class="demo-item reveal">
-                    <div class="phone">
+                    <div class="phone reveal" data-r="tilt" style="--tilt:4deg">
                         <div class="phone-screen mini-cafe" aria-hidden="true">
                             <div class="mini-nav"><span class="mini-logo">BUTTER &amp; STEAM</span><span class="mini-burger"></span></div>
                             <div class="mini-hero">
@@ -490,7 +586,7 @@ footer a:hover { text-decoration: underline; }
                     <p class="demo-cap"><strong>Butter &amp; Steam</strong> a café<br><span class="demo-tag">Demo design</span></p>
                 </div>
                 <div class="demo-item reveal">
-                    <div class="phone">
+                    <div class="phone reveal" data-r="tilt" style="--tilt:-3deg">
                         <div class="phone-screen mini-plumb" aria-hidden="true">
                             <div class="mini-nav"><span class="mini-logo">R. DALTON PLUMBING</span><span class="mini-burger"></span></div>
                             <div class="mini-hero">
@@ -569,10 +665,10 @@ footer a:hover { text-decoration: underline; }
                 <h2 class="sec-title">One price. No surprises. No monthly fees.</h2>
             </div>
             <div class="price-banner reveal">Free mockup first — you only pay if you like it.</div>
-            <div class="price-grid">
+            <div class="price-grid" data-stagger>
                 <div class="price-card reveal">
                     <h3>The One-Pager</h3>
-                    <div class="price-tag">$250 <small>one-off</small></div>
+                    <div class="price-tag">$<span data-price="250">250</span> <small>one-off</small></div>
                     <p class="price-desc">Everything about your business on one smart page.</p>
                     <ul class="ticks">
                         <li>Looks great on phones and computers</li>
@@ -586,7 +682,7 @@ footer a:hover { text-decoration: underline; }
                 <div class="price-card featured reveal">
                     <span class="price-badge">Most popular</span>
                     <h3>The Full Shop</h3>
-                    <div class="price-tag">$450 <small>one-off</small></div>
+                    <div class="price-tag">$<span data-price="450">450</span> <small>one-off</small></div>
                     <p class="price-desc">Up to five pages, for businesses with more to show.</p>
                     <ul class="ticks">
                         <li>Everything in The One-Pager</li>
@@ -608,7 +704,7 @@ footer a:hover { text-decoration: underline; }
                 <span class="sec-kicker">How it works</span>
                 <h2 class="sec-title">From "we should really sort the website" to live, in four steps.</h2>
             </div>
-            <div class="steps">
+            <div class="steps" data-stagger>
                 <div class="step reveal">
                     <div class="step-num" aria-hidden="true">1</div>
                     <div>
@@ -648,7 +744,7 @@ footer a:hover { text-decoration: underline; }
                 <span class="sec-kicker">Who you're dealing with</span>
                 <h2 class="sec-title">Two friends. One builds, one listens.</h2>
             </div>
-            <div class="duo">
+            <div class="duo" data-stagger>
                 <div class="duo-card reveal">
                     <span class="duo-role">Founder · builds the sites</span>
                     <h3>The Builder</h3>
@@ -660,7 +756,7 @@ footer a:hover { text-decoration: underline; }
                     <p>The person who answers the phone, in plain English, usually the same day. One name, not a ticket queue.</p>
                 </div>
             </div>
-            <div class="diff">
+            <div class="diff" data-stagger>
                 <div class="diff-item reveal"><strong>Plain English</strong><span>We'll never make you learn what "SEO" means.</span></div>
                 <div class="diff-item reveal"><strong>Fast</strong><span>Days, not months. Your mockup usually lands within the week.</span></div>
                 <div class="diff-item reveal"><strong>No lock-in</strong><span>No contracts, no monthly fees. Leave anytime and take everything with you.</span></div>
@@ -671,7 +767,7 @@ footer a:hover { text-decoration: underline; }
     <!-- ── FAQ ── -->
     <section>
         <div class="wrap">
-            <div class="reveal" style="text-align:center">
+            <div class="reveal t-center" style="text-align:center">
                 <span class="sec-kicker">Questions</span>
                 <h2 class="sec-title">Fair questions, straight answers.</h2>
             </div>
@@ -711,7 +807,7 @@ footer a:hover { text-decoration: underline; }
     <!-- ── Contact ── -->
     <section class="contact" id="contact">
         <div class="wrap">
-            <div class="contact-head reveal">
+            <div class="contact-head reveal t-center">
                 <span class="sec-kicker">No pressure, no pitch</span>
                 <h2 class="sec-title">Get your free mockup.</h2>
                 <p class="sec-sub">Tell us a little about your business. We'll reply within one working day — with a preview, not a sales pitch.</p>
@@ -800,24 +896,95 @@ footer a:hover { text-decoration: underline; }
     });
     document.title = CONFIG.name + ' — Websites for local businesses';
 
-    // ── Header border on scroll ──
-    const header = document.getElementById('site-header');
-    window.addEventListener('scroll', () => {
-        header.classList.toggle('scrolled', window.scrollY > 24);
-    }, { passive: true });
-
-    // ── Reveal on scroll (skipped for reduced motion) ──
+    // ── Scroll engine: header, progress bar, parallax, steps line ──
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const header = document.getElementById('site-header');
+    const progressBar = document.getElementById('scroll-progress');
+    const heroBg = document.querySelector('.hero-bg');
+    const stepsEl = document.querySelector('.steps');
+    const stepEls = stepsEl ? Array.from(stepsEl.querySelectorAll('.step')) : [];
+    const duoEl = document.querySelector('.demo-duo');
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    let ticking = false;
+
+    if (reduceMotion) stepEls.forEach(s => s.classList.add('lit'));
+
+    function onScroll() {
+        ticking = false;
+        const y = window.scrollY;
+        const vh = window.innerHeight;
+        header.classList.toggle('scrolled', y > 24);
+
+        const max = document.documentElement.scrollHeight - vh;
+        if (progressBar && max > 0) progressBar.style.transform = 'scaleX(' + (y / max).toFixed(4) + ')';
+
+        if (reduceMotion) return;
+
+        if (heroBg && y < vh * 1.5) heroBg.style.transform = 'translateY(' + (y * 0.18).toFixed(1) + 'px)';
+
+        if (stepsEl) {
+            const r = stepsEl.getBoundingClientRect();
+            const p = clamp((vh * 0.82 - r.top) / (r.height + vh * 0.3), 0, 1);
+            stepsEl.style.setProperty('--sp', p.toFixed(3));
+            stepEls.forEach((s, i) => s.classList.toggle('lit', p >= (i + 0.55) / stepEls.length));
+        }
+
+        if (duoEl) {
+            const r = duoEl.getBoundingClientRect();
+            if (r.bottom > 0 && r.top < vh) {
+                const d = (r.top + r.height / 2 - vh / 2) / vh;
+                duoEl.style.setProperty('--duo-shift', clamp(-d * 46, -34, 34).toFixed(1) + 'px');
+            }
+        }
+    }
+    window.addEventListener('scroll', () => {
+        if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
+    }, { passive: true });
+    requestAnimationFrame(onScroll);
+
+    // ── Reveal on scroll, staggered per group (skipped for reduced motion) ──
+    document.querySelectorAll('[data-stagger]').forEach(group => {
+        Array.from(group.querySelectorAll('.reveal')).forEach((el, i) => {
+            el.style.transitionDelay = (i * 90) + 'ms';
+        });
+    });
     const revealEls = document.querySelectorAll('.reveal');
     if (reduceMotion || !('IntersectionObserver' in window)) {
         revealEls.forEach(el => el.classList.add('in'));
     } else {
         const obs = new IntersectionObserver(entries => {
             entries.forEach(e => {
-                if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+                if (!e.isIntersecting) return;
+                const el = e.target;
+                el.classList.add('in');
+                obs.unobserve(el);
+                // clear the stagger delay once revealed so hover effects stay snappy
+                const d = parseFloat(el.style.transitionDelay) || 0;
+                setTimeout(() => { el.style.transitionDelay = ''; }, d + 700);
             });
         }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
         revealEls.forEach(el => obs.observe(el));
+    }
+
+    // ── Price count-up ──
+    const priceEls = document.querySelectorAll('[data-price]');
+    if (priceEls.length && !reduceMotion && 'IntersectionObserver' in window) {
+        const pObs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (!e.isIntersecting) return;
+                pObs.unobserve(e.target);
+                const el = e.target;
+                const target = parseInt(el.dataset.price, 10);
+                const t0 = performance.now();
+                const tick = now => {
+                    const p = Math.min((now - t0) / 1100, 1);
+                    el.textContent = Math.round(target * (1 - Math.pow(1 - p, 4)));
+                    if (p < 1) requestAnimationFrame(tick);
+                };
+                requestAnimationFrame(tick);
+            });
+        }, { threshold: 0.6 });
+        priceEls.forEach(el => pObs.observe(el));
     }
 
     // ── Smooth anchor scroll ──
