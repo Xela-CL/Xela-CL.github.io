@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopfront Studio — Websites for local businesses</title>
+<meta name="description" content="Simple, good-looking websites for barbers, cafés, tradespeople and local shops. One fixed price, live in about a week, no monthly fees. Free mockup first — you only pay if you like it.">
+<!-- staging: remove this noindex when the site moves to its own domain -->
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#fdfaf5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Karla:wght@400;700&display=swap" rel="stylesheet">
+<noscript><style>.reveal { opacity: 1 !important; transform: none !important; }</style></noscript>
+<style>
+/* ─────────────────────────────────────────────────────────
+   Shopfront Studio — single-file landing page.
+   Business name, area and email live in the CONFIG object
+   at the top of the <script> at the bottom of this file.
+   ───────────────────────────────────────────────────────── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --paper: #fdfaf5;
+    --card: #ffffff;
+    --ink: #292420;
+    --muted: #6e6357;
+    --border: #eae2d6;
+    --accent: #c2410c;
+    --accent-dark: #9a3412;
+    --accent-tint: #fdeee2;
+    --good: #2f7d4f;
+    --shadow: 0 14px 34px -18px rgba(120, 80, 40, 0.25);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Karla', system-ui, -apple-system, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; font-weight: 600; line-height: 1.12; }
+
+::selection { background: var(--accent-tint); color: var(--accent-dark); }
+
+[hidden] { display: none !important; }
+
+a:focus-visible, button:focus-visible, summary:focus-visible {
+    outline: 2.5px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+.wrap { max-width: 1060px; margin: 0 auto; padding: 0 20px; }
+
+section { padding: 64px 0; }
+@media (min-width: 720px) { section { padding: 96px 0; } }
+
+/* ── Section headings ── */
+.sec-kicker {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent-dark);
+    background: var(--accent-tint);
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+}
+.sec-title { font-size: 29px; letter-spacing: -0.01em; }
+.sec-sub { color: var(--muted); margin-top: 12px; max-width: 560px; font-size: 17px; }
+@media (min-width: 720px) { .sec-title { font-size: 38px; } }
+
+/* ── Buttons ── */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 26px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    border: 0;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+.btn:active { transform: scale(0.98); }
+.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 10px 24px -12px rgba(194, 65, 12, 0.55); }
+.btn-primary:hover { background: var(--accent-dark); }
+.btn-ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--border); }
+.btn-ghost:hover { border-color: var(--muted); }
+
+/* ── Skip link ── */
+.skip { position: absolute; left: -9999px; top: 0; z-index: 100; background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 0 0 12px 0; text-decoration: none; font-weight: 700; }
+.skip:focus { left: 0; }
+
+/* ── Header ── */
+#site-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    background: rgba(253, 250, 245, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s;
+}
+#site-header.scrolled { border-bottom-color: var(--border); }
+.header-inner { display: flex; align-items: center; justify-content: space-between; height: 66px; }
+.logo { display: flex; align-items: center; gap: 10px; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 19px; color: var(--ink); text-decoration: none; }
+.logo svg { flex: none; }
+.header-links { display: flex; align-items: center; gap: 18px; }
+.header-links .plain-link { display: none; color: var(--ink); text-decoration: none; font-weight: 700; font-size: 15px; }
+.header-links .plain-link:hover { color: var(--accent-dark); }
+.header-links .btn { padding: 10px 18px; font-size: 15px; }
+@media (min-width: 480px) { .header-links .plain-link { display: inline; } }
+
+/* ── Hero ── */
+.hero { padding-top: 118px; }
+.hero-grid { display: grid; gap: 44px; align-items: center; }
+.hero h1 { font-size: 37px; letter-spacing: -0.015em; }
+.hero-sub { margin-top: 16px; font-size: 18px; color: var(--muted); max-width: 480px; }
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+.chip { display: inline-flex; align-items: center; gap: 7px; background: var(--accent-tint); color: var(--accent-dark); font-weight: 700; font-size: 13.5px; padding: 7px 13px; border-radius: 999px; }
+.chip::before { content: '✓'; font-weight: 700; }
+.hero-phone { display: flex; justify-content: center; }
+@media (min-width: 900px) {
+    .hero { padding-top: 150px; }
+    .hero-grid { grid-template-columns: 1.15fr 0.85fr; }
+    .hero h1 { font-size: 52px; }
+}
+
+/* ── Phone frames (pure CSS demo previews) ── */
+.phone {
+    width: 242px;
+    flex: none;
+    background: #1c1917;
+    border-radius: 38px;
+    padding: 10px;
+    box-shadow: 0 30px 55px -24px rgba(120, 80, 40, 0.4);
+}
+.phone-screen {
+    position: relative;
+    height: 468px;
+    border-radius: 29px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: var(--m-bg);
+    color: var(--m-ink);
+}
+.phone-screen::before {
+    /* notch */
+    content: '';
+    position: absolute;
+    top: 8px; left: 50%;
+    transform: translateX(-50%);
+    width: 78px; height: 15px;
+    background: #1c1917;
+    border-radius: 999px;
+    z-index: 2;
+}
+
+/* mini-site shared parts */
+.mini-nav { display: flex; justify-content: space-between; align-items: center; padding: 32px 16px 10px; }
+.mini-logo { font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 11px; letter-spacing: 0.06em; }
+.mini-burger { width: 14px; height: 2px; background: currentColor; border-radius: 2px; box-shadow: 0 4px 0 currentColor, 0 -4px 0 currentColor; opacity: 0.8; }
+.mini-hero { padding: 14px 16px 16px; }
+.mini-kicker { font-size: 8px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--m-acc); margin-bottom: 6px; }
+.mini-title { font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 19px; line-height: 1.15; }
+.mini-btn { display: inline-block; margin-top: 12px; background: var(--m-acc); color: var(--m-acc-ink); font-size: 9.5px; font-weight: 700; padding: 7px 14px; border-radius: 999px; }
+.mini-list { margin: 4px 16px; border-top: 1px solid var(--m-line); }
+.mini-row { display: flex; justify-content: space-between; padding: 8px 2px; font-size: 9.5px; border-bottom: 1px solid var(--m-line); }
+.mini-row span:last-child { font-weight: 700; }
+.mini-stars { padding: 0 16px; font-size: 10px; letter-spacing: 2px; color: var(--m-acc); }
+.mini-stars small { display: block; letter-spacing: 0; font-size: 8px; color: var(--m-mut); margin-top: 2px; }
+.mini-foot { margin-top: auto; padding: 12px 16px 16px; font-size: 8.5px; color: var(--m-mut); border-top: 1px solid var(--m-line); }
+
+/* mini palettes — one per fictional demo business */
+.mini-fade  { --m-bg: #161311; --m-ink: #f3ede4; --m-mut: #9d938a; --m-acc: #d4a24e; --m-acc-ink: #161311; --m-line: rgba(243, 237, 228, 0.14); }
+.mini-cafe  { --m-bg: #faf3e3; --m-ink: #24301f; --m-mut: #6f7a63; --m-acc: #2f5d3f; --m-acc-ink: #faf3e3; --m-line: rgba(36, 48, 31, 0.14); }
+.mini-plumb { --m-bg: #1d3557; --m-ink: #f2f6fb; --m-mut: #9fb0c6; --m-acc: #ffd23f; --m-acc-ink: #1d3557; --m-line: rgba(242, 246, 251, 0.16); }
+
+/* ── Laptop frame + device duo ── */
+.laptop { width: 100%; filter: drop-shadow(0 26px 30px rgba(120, 80, 40, 0.28)); }
+.laptop-lid { width: calc(100% - 36px); margin: 0 auto; background: #1c1917; border-radius: 14px 14px 0 0; padding: 10px 10px 8px; position: relative; }
+.laptop-lid::before { content: ''; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); width: 3px; height: 3px; border-radius: 50%; background: #4a423b; }
+.laptop-screen { aspect-ratio: 16 / 10; border-radius: 7px; overflow: hidden; display: flex; flex-direction: column; background: var(--m-bg); color: var(--m-ink); }
+.laptop-base { height: 14px; background: linear-gradient(#4a423b, #26211d); border-radius: 3px 3px 16px 16px; position: relative; }
+.laptop-base::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 15%; height: 5px; background: #1c1917; border-radius: 0 0 8px 8px; }
+
+.demo-duo { position: relative; width: 100%; max-width: 620px; margin: 44px auto 0; }
+.demo-duo .phone { position: absolute; left: -14px; bottom: -8px; transform: translateY(var(--duo-shift, 0px)) scale(0.34); transform-origin: bottom left; }
+
+/* desktop-layout mini site (inside the laptop) */
+.mini-d-nav { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; border-bottom: 1px solid var(--m-line); }
+.mini-d-links { display: flex; gap: 14px; font-size: 8px; font-weight: 700; color: var(--m-mut); }
+.mini-d-hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 16px; align-items: center; padding: 12px 16px; }
+.mini-d-art { border-radius: 8px; aspect-ratio: 4 / 3; border: 1px solid var(--m-line); background: linear-gradient(135deg, var(--m-acc) 0%, transparent 140%); opacity: 0.35; }
+.mini-d-cols { display: none; grid-template-columns: 1fr 1fr; column-gap: 24px; margin: 0 18px; border-top: 1px solid var(--m-line); }
+.laptop-screen .mini-title { font-size: 13px; }
+.laptop-screen .mini-btn { margin-top: 8px; }
+.laptop-screen .mini-foot { display: none; }
+@media (min-width: 720px) {
+    .demo-duo .phone { transform: translateY(var(--duo-shift, 0px)) scale(0.5); left: -44px; }
+    .mini-d-hero { gap: 18px; padding: 16px 18px 14px; }
+    .mini-d-cols { display: grid; }
+    .laptop-screen .mini-title { font-size: 16px; }
+    .laptop-screen .mini-foot { display: block; padding: 10px 18px 12px; }
+}
+
+/* ── Pain cards ── */
+.pain-grid { display: grid; gap: 16px; margin-top: 30px; }
+.pain-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 24px; box-shadow: var(--shadow); }
+.pain-icon { width: 42px; height: 42px; border-radius: 13px; background: var(--accent-tint); color: var(--accent-dark); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+.pain-card h3 { font-size: 19px; margin-bottom: 6px; }
+.pain-card p { color: var(--muted); font-size: 15px; }
+@media (min-width: 720px) { .pain-grid { grid-template-columns: repeat(3, 1fr); } }
+
+/* ── Demo designs ── */
+.demos { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.demo-row { display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 34px 4px 12px; -webkit-overflow-scrolling: touch; }
+.demo-item { scroll-snap-align: center; flex: none; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.demo-cap { text-align: center; font-size: 14.5px; color: var(--muted); }
+.demo-cap strong { display: block; color: var(--ink); font-size: 16px; }
+.demo-tag { display: inline-block; margin-top: 6px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-dark); background: var(--accent-tint); padding: 3px 9px; border-radius: 999px; }
+@media (min-width: 900px) {
+    .demo-row { display: grid; grid-template-columns: repeat(3, 1fr); overflow: visible; justify-items: center; }
+}
+
+/* ── Pricing ── */
+.price-banner { background: var(--accent-tint); color: var(--accent-dark); font-weight: 700; text-align: center; padding: 13px 18px; border-radius: 14px; margin-top: 30px; font-size: 15.5px; }
+.price-grid { display: grid; gap: 22px; margin-top: 22px; }
+.price-card { position: relative; background: var(--card); border: 1.5px solid var(--border); border-radius: 22px; padding: 30px 26px; box-shadow: var(--shadow); }
+.price-card.featured { border: 2px solid var(--accent); }
+.price-badge { position: absolute; top: -13px; right: 22px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; padding: 4px 13px; border-radius: 999px; }
+.price-card h3 { font-size: 22px; }
+.price-tag { font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 46px; margin-top: 8px; }
+.price-tag small { font-family: 'Karla', sans-serif; font-weight: 400; font-size: 15px; color: var(--muted); }
+.price-desc { color: var(--muted); font-size: 15.5px; margin-top: 6px; }
+.ticks { list-style: none; margin-top: 20px; display: grid; gap: 11px; }
+.ticks li { display: flex; gap: 10px; font-size: 15px; align-items: baseline; }
+.ticks li::before { content: '✓'; color: var(--good); font-weight: 700; flex: none; }
+.fineprint { margin-top: 24px; color: var(--muted); font-size: 14.5px; max-width: 720px; }
+@media (min-width: 720px) { .price-grid { grid-template-columns: 1fr 1fr; } }
+
+/* ── How it works ── */
+.steps { display: grid; gap: 30px; margin-top: 34px; }
+.step { display: flex; gap: 16px; align-items: flex-start; }
+.step-num { flex: none; width: 46px; height: 46px; border-radius: 50%; background: var(--accent-tint); color: var(--accent-dark); font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 21px; display: flex; align-items: center; justify-content: center; }
+.step h3 { font-size: 19px; margin-bottom: 4px; }
+.step p { color: var(--muted); font-size: 15px; }
+@media (min-width: 900px) {
+    .steps { grid-template-columns: repeat(4, 1fr); }
+    .step { flex-direction: column; }
+}
+
+/* ── Why us ── */
+.duo { display: grid; gap: 20px; margin-top: 30px; }
+.duo-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; box-shadow: var(--shadow); }
+.duo-role { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-dark); }
+.duo-card h3 { font-size: 21px; margin-top: 6px; }
+.duo-card p { color: var(--muted); font-size: 15.5px; margin-top: 8px; }
+.diff { display: grid; gap: 14px; margin-top: 20px; }
+.diff-item { border: 1px dashed var(--border); border-radius: 16px; padding: 18px 20px; font-size: 15px; }
+.diff-item strong { display: block; font-size: 16px; margin-bottom: 3px; }
+.diff-item span { color: var(--muted); }
+@media (min-width: 720px) {
+    .duo { grid-template-columns: 1fr 1fr; }
+    .diff { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ── FAQ ── */
+.faq { max-width: 720px; margin: 26px auto 0; }
+.faq details { border-bottom: 1px solid var(--border); }
+.faq summary { cursor: pointer; list-style: none; position: relative; padding: 19px 36px 19px 0; font-weight: 700; font-size: 16.5px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+    content: '';
+    position: absolute;
+    right: 6px; top: 50%;
+    width: 9px; height: 9px;
+    border-right: 2.5px solid var(--accent);
+    border-bottom: 2.5px solid var(--accent);
+    transform: translateY(-70%) rotate(45deg);
+    transition: transform 0.25s;
+}
+.faq details[open] summary::after { transform: translateY(-30%) rotate(225deg); }
+.faq-a { padding: 0 0 20px; color: var(--muted); font-size: 15.5px; max-width: 640px; }
+
+/* ── Contact ── */
+.contact { background: linear-gradient(180deg, var(--card) 55%, #fbeadb 100%); border-top: 1px solid var(--border); }
+.contact-head { text-align: center; }
+.contact-head .sec-sub { margin-left: auto; margin-right: auto; }
+.contact-card { background: var(--paper); border: 1px solid var(--border); border-radius: 24px; padding: 28px 24px; max-width: 620px; margin: 32px auto 0; }
+.field { margin-bottom: 18px; }
+.field label { display: block; font-weight: 700; font-size: 14.5px; margin-bottom: 7px; }
+.field label small { font-weight: 400; color: var(--muted); }
+.field input, .field select, .field textarea {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1.5px solid var(--border);
+    border-radius: 13px;
+    background: var(--card);
+    color: var(--ink);
+    font: inherit;
+    font-size: 16px;
+}
+.field textarea { min-height: 96px; resize: vertical; }
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible {
+    outline: 2.5px solid var(--accent);
+    outline-offset: 1px;
+    border-color: var(--accent);
+}
+.contact-card .btn { width: 100%; margin-top: 4px; }
+.form-alt { text-align: center; margin-top: 18px; font-size: 15px; color: var(--muted); }
+.form-alt a { color: var(--accent-dark); font-weight: 700; }
+.panel { text-align: center; padding: 30px 10px; font-size: 17px; }
+.panel strong { display: block; font-family: 'Fraunces', Georgia, serif; font-size: 23px; margin-bottom: 10px; }
+.panel a { color: var(--accent-dark); font-weight: 700; }
+.panel.error { color: var(--accent-dark); background: var(--accent-tint); border-radius: 14px; padding: 16px; font-size: 15px; margin-top: 16px; }
+
+/* ── Footer ── */
+footer { border-top: 1px solid var(--border); padding: 34px 20px; text-align: center; color: var(--muted); font-size: 14.5px; }
+footer a { color: var(--accent-dark); font-weight: 700; text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+/* ── Scroll flourishes ── */
+html, body { overflow-x: clip; }
+
+#scroll-progress {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    z-index: 60;
+    background: linear-gradient(90deg, var(--accent), #f0a36b);
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+.hero { position: relative; }
+.hero-bg { position: absolute; inset: -80px 0 0; pointer-events: none; z-index: -1; }
+.blob { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.55; }
+.b1 { width: 420px; height: 420px; background: #fbe3cf; top: -60px; right: -120px; animation: drift 16s ease-in-out infinite alternate; }
+.b2 { width: 320px; height: 320px; background: #f6d3b8; bottom: -40px; left: -140px; animation: drift 20s ease-in-out infinite alternate-reverse; }
+.b3 { width: 220px; height: 220px; background: #fdeee2; top: 30%; left: 42%; animation: drift 24s ease-in-out infinite alternate; }
+@keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(36px, 26px) scale(1.12); }
+}
+.hero-phone .phone { animation: bob 7s ease-in-out infinite; }
+@keyframes bob {
+    0%, 100% { transform: translateY(0) rotate(0.4deg); }
+    50% { transform: translateY(-12px) rotate(-0.6deg); }
+}
+
+/* ticker ribbon */
+.ticker { background: var(--ink); color: var(--paper); width: 104%; margin: 4px -2% -20px; padding: 13px 0; transform: rotate(-1.2deg); overflow: hidden; }
+.ticker-track { display: flex; width: max-content; animation: ticker 32s linear infinite; }
+.ticker-set { display: flex; align-items: center; gap: 30px; padding-right: 30px; }
+.ticker-set span { font-weight: 700; font-size: 14.5px; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+.ticker-set i { font-style: normal; color: #f0a36b; }
+@keyframes ticker { to { transform: translateX(-50%); } }
+
+/* card + phone hover lift */
+.pain-card, .price-card, .duo-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.pain-card:hover, .price-card:hover, .duo-card:hover { transform: translateY(-6px); box-shadow: 0 24px 44px -20px rgba(120, 80, 40, 0.35); }
+.demo-row .demo-item .phone { transition: opacity 0.55s ease, transform 0.45s ease; }
+.demo-row .demo-item:hover .phone { transform: translateY(-10px) rotate(-1.5deg); }
+
+/* section title underline sweep */
+.sec-title::after {
+    content: '';
+    display: block;
+    width: 58px; height: 4px;
+    border-radius: 2px;
+    margin-top: 14px;
+    background: linear-gradient(90deg, var(--accent), #f0a36b);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.7s 0.3s ease;
+}
+.t-center .sec-title::after { margin-left: auto; margin-right: auto; transform-origin: center; }
+.reveal.in .sec-title::after { transform: scaleX(1); }
+
+/* steps progress line (fills as you scroll) */
+.steps { position: relative; --sp: 0; }
+.steps::before, .steps::after { content: ''; position: absolute; left: 21px; top: 24px; bottom: 46px; width: 4px; border-radius: 2px; }
+.steps::before { background: var(--border); }
+.steps::after { background: linear-gradient(var(--accent), #f0a36b); transform: scaleY(var(--sp)); transform-origin: top; }
+.step-num { position: relative; z-index: 1; transition: background 0.4s ease, color 0.4s ease, box-shadow 0.4s ease; }
+.step.lit .step-num { background: var(--accent); color: #fff; box-shadow: 0 0 0 6px var(--accent-tint); }
+@media (min-width: 900px) {
+    .steps::before, .steps::after { left: 23px; right: calc(25% - 23px); top: 21px; bottom: auto; width: auto; height: 4px; }
+    .steps::after { transform: scaleX(var(--sp)); transform-origin: left; }
+}
+
+/* reveal variants */
+.reveal[data-r="pop"] { transform: translateY(12px) scale(0.94); }
+.reveal[data-r="tilt"] { transform: translateY(44px) rotate(var(--tilt, -5deg)) scale(0.96); }
+
+/* ── Reveal on scroll ── */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .btn, .faq summary::after { transition: none !important; }
+    .blob, .hero-phone .phone, .ticker-track { animation: none !important; }
+    .sec-title::after, .steps::after { transform: none !important; transition: none !important; }
+    #scroll-progress { display: none; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+<div id="scroll-progress" aria-hidden="true"></div>
+
+<header id="site-header">
+    <div class="wrap header-inner">
+        <a class="logo" href="#top" aria-label="Shopfront Studio — back to top">
+            <svg width="28" height="22" viewBox="0 0 32 25" aria-hidden="true">
+                <path d="M3 2 h26 l3 9 H0 Z" fill="#c2410c"/>
+                <path d="M0 11 h8 v3 a4 4 0 0 1 -8 0 Z" fill="#c2410c"/>
+                <path d="M8 11 h8 v3 a4 4 0 0 1 -8 0 Z" fill="#f6c9a8"/>
+                <path d="M16 11 h8 v3 a4 4 0 0 1 -8 0 Z" fill="#c2410c"/>
+                <path d="M24 11 h8 v3 a4 4 0 0 1 -8 0 Z" fill="#f6c9a8"/>
+            </svg>
+            <span data-cfg="name">Shopfront Studio</span>
+        </a>
+        <nav class="header-links" aria-label="Main">
+            <a class="plain-link" href="#prices">Prices</a>
+            <a class="btn btn-primary" href="#contact">Get a free mockup</a>
+        </nav>
+    </div>
+</header>
+
+<main id="main">
+
+    <!-- ── Hero ── -->
+    <section class="hero" id="top">
+        <div class="hero-bg" aria-hidden="true">
+            <span class="blob b1"></span>
+            <span class="blob b2"></span>
+            <span class="blob b3"></span>
+        </div>
+        <div class="wrap hero-grid">
+            <div data-stagger>
+                <h1 class="reveal">A proper website for your business. Live in a week.</h1>
+                <p class="hero-sub reveal">We build simple, good-looking websites for barbers, cafés, tradespeople and local shops — one fixed price, no monthly fees, no tech talk.</p>
+                <div class="hero-ctas reveal">
+                    <a class="btn btn-primary" href="#contact">Get a free mockup</a>
+                    <a class="btn btn-ghost" href="#prices">See prices</a>
+                </div>
+                <div class="chips reveal">
+                    <span class="chip">Fixed price, agreed up front</span>
+                    <span class="chip">No monthly fees</span>
+                    <span class="chip">You own everything</span>
+                </div>
+            </div>
+            <div class="hero-phone reveal" data-r="pop">
+                <div class="phone" role="img" aria-label="Demo website design for a barbershop called Fade District">
+                    <div class="phone-screen mini-fade" aria-hidden="true">
+                        <div class="mini-nav"><span class="mini-logo">FADE DISTRICT</span><span class="mini-burger"></span></div>
+                        <div class="mini-hero">
+                            <div class="mini-kicker">Barbershop · Walk-ins welcome</div>
+                            <div class="mini-title">Sharp cuts. No waiting around.</div>
+                            <span class="mini-btn">Book a chair</span>
+                        </div>
+                        <div class="mini-list">
+                            <div class="mini-row"><span>Skin fade</span><span>$28</span></div>
+                            <div class="mini-row"><span>Scissor cut</span><span>$24</span></div>
+                            <div class="mini-row"><span>Beard trim</span><span>$14</span></div>
+                            <div class="mini-row"><span>Kids cut</span><span>$18</span></div>
+                        </div>
+                        <div class="mini-foot">Open till 7 on weekdays · Corner of Main &amp; 4th</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Ticker ribbon ── -->
+    <div class="ticker" aria-hidden="true">
+        <div class="ticker-track">
+            <div class="ticker-set">
+                <span>Barbers</span><i>✦</i><span>Cafés</span><i>✦</i><span>Plumbers</span><i>✦</i><span>Gyms</span><i>✦</i><span>Salons</span><i>✦</i><span>Bakeries</span><i>✦</i><span>Electricians</span><i>✦</i><span>Florists</span><i>✦</i><span>Restaurants</span><i>✦</i><span>Corner shops</span><i>✦</i>
+            </div>
+            <div class="ticker-set">
+                <span>Barbers</span><i>✦</i><span>Cafés</span><i>✦</i><span>Plumbers</span><i>✦</i><span>Gyms</span><i>✦</i><span>Salons</span><i>✦</i><span>Bakeries</span><i>✦</i><span>Electricians</span><i>✦</i><span>Florists</span><i>✦</i><span>Restaurants</span><i>✦</i><span>Corner shops</span><i>✦</i>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Pain ── -->
+    <section>
+        <div class="wrap">
+            <div class="reveal">
+                <span class="sec-kicker">Sound familiar?</span>
+                <h2 class="sec-title">Your customers are looking for you online. What are they finding?</h2>
+            </div>
+            <div class="pain-grid" data-stagger>
+                <div class="pain-card reveal">
+                    <div class="pain-icon" aria-hidden="true">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8.5 9.5l5 5M13.5 9.5l-5 5"/></svg>
+                    </div>
+                    <h3>Nothing at all</h3>
+                    <p>No website means customers pick the shop that has one. Every single day.</p>
+                </div>
+                <div class="pain-card reveal">
+                    <div class="pain-icon" aria-hidden="true">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M9 14l6 4M15 14l-6 4"/></svg>
+                    </div>
+                    <h3>A Facebook page from 2019</h3>
+                    <p>Old hours, old prices, no way to book. It might be costing you more than having nothing.</p>
+                </div>
+                <div class="pain-card reveal">
+                    <div class="pain-icon" aria-hidden="true">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 6.5c0-2-2.2-3-5-3s-5 1-5 3 1.8 2.8 5 3.5c3.2 0.7 5 1.5 5 3.5s-2.2 3-5 3-5-1-5-3"/></svg>
+                    </div>
+                    <h3>An agency quote for $3,000</h3>
+                    <p>Plus $80 a month, forever. It doesn't have to cost that. Not even close.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Demo designs ── -->
+    <section class="demos">
+        <div class="wrap">
+            <div class="reveal">
+                <span class="sec-kicker">Demo designs</span>
+                <h2 class="sec-title">See what yours could look like.</h2>
+                <p class="sec-sub">Three demo designs we built to show the style, on phones and on computers — your site becomes the next one, and our founding clients get first pick of launch pricing.</p>
+            </div>
+            <div class="demo-row" data-stagger>
+                <div class="demo-item reveal">
+                    <div class="phone reveal" data-r="tilt" style="--tilt:-5deg">
+                        <div class="phone-screen mini-fade" aria-hidden="true">
+                            <div class="mini-nav"><span class="mini-logo">FADE DISTRICT</span><span class="mini-burger"></span></div>
+                            <div class="mini-hero">
+                                <div class="mini-kicker">Barbershop · Walk-ins welcome</div>
+                                <div class="mini-title">Sharp cuts. No waiting around.</div>
+                                <span class="mini-btn">Book a chair</span>
+                            </div>
+                            <div class="mini-list">
+                                <div class="mini-row"><span>Skin fade</span><span>$28</span></div>
+                                <div class="mini-row"><span>Scissor cut</span><span>$24</span></div>
+                                <div class="mini-row"><span>Beard trim</span><span>$14</span></div>
+                            </div>
+                            <div class="mini-foot">Open till 7 on weekdays · Corner of Main &amp; 4th</div>
+                        </div>
+                    </div>
+                    <p class="demo-cap"><strong>Fade District</strong> a barbershop<br><span class="demo-tag">Demo design</span></p>
+                </div>
+                <div class="demo-item reveal">
+                    <div class="phone reveal" data-r="tilt" style="--tilt:4deg">
+                        <div class="phone-screen mini-cafe" aria-hidden="true">
+                            <div class="mini-nav"><span class="mini-logo">BUTTER &amp; STEAM</span><span class="mini-burger"></span></div>
+                            <div class="mini-hero">
+                                <div class="mini-kicker">Café · Brunch · Fresh bakes</div>
+                                <div class="mini-title">Good coffee. Better brunch.</div>
+                                <span class="mini-btn">See the menu</span>
+                            </div>
+                            <div class="mini-list">
+                                <div class="mini-row"><span>Flat white</span><span>$4</span></div>
+                                <div class="mini-row"><span>The big brunch</span><span>$14</span></div>
+                                <div class="mini-row"><span>Cinnamon bun</span><span>$5</span></div>
+                            </div>
+                            <div class="mini-foot">Open 7–4 weekdays · 8–5 weekends</div>
+                        </div>
+                    </div>
+                    <p class="demo-cap"><strong>Butter &amp; Steam</strong> a café<br><span class="demo-tag">Demo design</span></p>
+                </div>
+                <div class="demo-item reveal">
+                    <div class="phone reveal" data-r="tilt" style="--tilt:-3deg">
+                        <div class="phone-screen mini-plumb" aria-hidden="true">
+                            <div class="mini-nav"><span class="mini-logo">R. DALTON PLUMBING</span><span class="mini-burger"></span></div>
+                            <div class="mini-hero">
+                                <div class="mini-kicker">Plumbing &amp; heating · 24/7</div>
+                                <div class="mini-title">Burst pipe? We're on the way.</div>
+                                <span class="mini-btn">Call now</span>
+                            </div>
+                            <div class="mini-stars">★★★★★<small>"Turned up in 40 minutes on a Sunday."</small></div>
+                            <div class="mini-list">
+                                <div class="mini-row"><span>Emergency call-out</span><span>24/7</span></div>
+                                <div class="mini-row"><span>Boiler service</span><span>from $90</span></div>
+                            </div>
+                            <div class="mini-foot">Fully insured · Free quotes</div>
+                        </div>
+                    </div>
+                    <p class="demo-cap"><strong>R. Dalton Plumbing</strong> a tradesperson<br><span class="demo-tag">Demo design</span></p>
+                </div>
+            </div>
+
+            <!-- ── Same site on a computer ── -->
+            <div class="demo-item reveal">
+                <div class="demo-duo" role="img" aria-label="Demo website for the café Butter &amp; Steam, shown on a laptop and a phone">
+                    <div class="laptop" aria-hidden="true">
+                        <div class="laptop-lid">
+                            <div class="laptop-screen mini-cafe">
+                                <div class="mini-d-nav">
+                                    <span class="mini-logo">BUTTER &amp; STEAM</span>
+                                    <span class="mini-d-links"><span>Menu</span><span>Hours</span><span>Find us</span></span>
+                                </div>
+                                <div class="mini-d-hero">
+                                    <div>
+                                        <div class="mini-kicker">Café · Brunch · Fresh bakes</div>
+                                        <div class="mini-title">Good coffee. Better brunch.</div>
+                                        <span class="mini-btn">See the menu</span>
+                                    </div>
+                                    <div class="mini-d-art"></div>
+                                </div>
+                                <div class="mini-d-cols">
+                                    <div class="mini-row"><span>Flat white</span><span>$4</span></div>
+                                    <div class="mini-row"><span>The big brunch</span><span>$14</span></div>
+                                    <div class="mini-row"><span>Cinnamon bun</span><span>$5</span></div>
+                                    <div class="mini-row"><span>Iced latte</span><span>$5</span></div>
+                                </div>
+                                <div class="mini-foot">Open 7–4 weekdays · 8–5 weekends</div>
+                            </div>
+                        </div>
+                        <div class="laptop-base"></div>
+                    </div>
+                    <div class="phone" aria-hidden="true">
+                        <div class="phone-screen mini-cafe">
+                            <div class="mini-nav"><span class="mini-logo">BUTTER &amp; STEAM</span><span class="mini-burger"></span></div>
+                            <div class="mini-hero">
+                                <div class="mini-kicker">Café · Brunch · Fresh bakes</div>
+                                <div class="mini-title">Good coffee. Better brunch.</div>
+                                <span class="mini-btn">See the menu</span>
+                            </div>
+                            <div class="mini-list">
+                                <div class="mini-row"><span>Flat white</span><span>$4</span></div>
+                                <div class="mini-row"><span>The big brunch</span><span>$14</span></div>
+                                <div class="mini-row"><span>Cinnamon bun</span><span>$5</span></div>
+                            </div>
+                            <div class="mini-foot">Open 7–4 weekdays · 8–5 weekends</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="demo-cap"><strong>Same site, big screen</strong> every design comes ready for phones and computers — nothing extra to pay<br><span class="demo-tag">Demo design</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Pricing ── -->
+    <section id="prices">
+        <div class="wrap">
+            <div class="reveal">
+                <span class="sec-kicker">Prices</span>
+                <h2 class="sec-title">One price. No surprises. No monthly fees.</h2>
+            </div>
+            <div class="price-banner reveal">Free mockup first — you only pay if you like it.</div>
+            <div class="price-grid" data-stagger>
+                <div class="price-card reveal">
+                    <h3>The One-Pager</h3>
+                    <div class="price-tag">$<span data-price="250">250</span> <small>one-off</small></div>
+                    <p class="price-desc">Everything about your business on one smart page.</p>
+                    <ul class="ticks">
+                        <li>Looks great on phones and computers</li>
+                        <li>Click-to-call button for mobile customers</li>
+                        <li>Map, opening hours and photo gallery</li>
+                        <li>Contact form that lands in your inbox</li>
+                        <li>Live in about a week</li>
+                        <li>Two rounds of tweaks included</li>
+                    </ul>
+                </div>
+                <div class="price-card featured reveal">
+                    <span class="price-badge">Most popular</span>
+                    <h3>The Full Shop</h3>
+                    <div class="price-tag">$<span data-price="450">450</span> <small>one-off</small></div>
+                    <p class="price-desc">Up to five pages, for businesses with more to show.</p>
+                    <ul class="ticks">
+                        <li>Everything in The One-Pager</li>
+                        <li>Menu, price list or services pages</li>
+                        <li>Booking or ordering links wired in</li>
+                        <li>Google Business Profile set up, so you show up on Maps</li>
+                        <li>Live in about two weeks</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="fineprint reveal">The only other cost is your web address — about $15 a year, paid straight to the registrar and owned by you. Hosting is free. Need changes later? $30 a time — or we hand you the keys and show you how to do it yourself.</p>
+        </div>
+    </section>
+
+    <!-- ── How it works ── -->
+    <section>
+        <div class="wrap">
+            <div class="reveal">
+                <span class="sec-kicker">How it works</span>
+                <h2 class="sec-title">From "we should really sort the website" to live, in four steps.</h2>
+            </div>
+            <div class="steps" data-stagger>
+                <div class="step reveal">
+                    <div class="step-num" aria-hidden="true">1</div>
+                    <div>
+                        <h3>Tell us about your business</h3>
+                        <p>Ten minutes on the phone — or over a coffee if you're local.</p>
+                    </div>
+                </div>
+                <div class="step reveal">
+                    <div class="step-num" aria-hidden="true">2</div>
+                    <div>
+                        <h3>We build you a free mockup</h3>
+                        <p>A real preview of your homepage. Costs you nothing.</p>
+                    </div>
+                </div>
+                <div class="step reveal">
+                    <div class="step-num" aria-hidden="true">3</div>
+                    <div>
+                        <h3>Happy? We finish the site</h3>
+                        <p>One fixed price, agreed before we start. No surprises at the end.</p>
+                    </div>
+                </div>
+                <div class="step reveal">
+                    <div class="step-num" aria-hidden="true">4</div>
+                    <div>
+                        <h3>You go live — and own it all</h3>
+                        <p>The site, the words, the web address. Yours forever.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Why us ── -->
+    <section class="demos">
+        <div class="wrap">
+            <div class="reveal">
+                <span class="sec-kicker">Who you're dealing with</span>
+                <h2 class="sec-title">Two friends. One builds, one listens.</h2>
+            </div>
+            <div class="duo" data-stagger>
+                <div class="duo-card reveal">
+                    <span class="duo-role">Founder · builds the sites</span>
+                    <h3>The Builder</h3>
+                    <p>Makes your site fast, tidy and easy to find — and sweats the details so you never have to think about them.</p>
+                </div>
+                <div class="duo-card reveal">
+                    <span class="duo-role">Founder · looks after you</span>
+                    <h3>Your Point of Contact</h3>
+                    <p>The person who answers the phone, in plain English, usually the same day. One name, not a ticket queue.</p>
+                </div>
+            </div>
+            <div class="diff" data-stagger>
+                <div class="diff-item reveal"><strong>Plain English</strong><span>We'll never make you learn what "SEO" means.</span></div>
+                <div class="diff-item reveal"><strong>Fast</strong><span>Days, not months. Your mockup usually lands within the week.</span></div>
+                <div class="diff-item reveal"><strong>No lock-in</strong><span>No contracts, no monthly fees. Leave anytime and take everything with you.</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FAQ ── -->
+    <section>
+        <div class="wrap">
+            <div class="reveal t-center" style="text-align:center">
+                <span class="sec-kicker">Questions</span>
+                <h2 class="sec-title">Fair questions, straight answers.</h2>
+            </div>
+            <div class="faq reveal">
+                <details>
+                    <summary>Why are you so much cheaper than an agency?</summary>
+                    <p class="faq-a">Because we're two people, not an office full of them. No account managers, no rent, and we build on hosting that's free. You pay for the work, not the overhead.</p>
+                </details>
+                <details>
+                    <summary>Do I need to write the words or take photos?</summary>
+                    <p class="faq-a">No. Tell us about your business and we'll draft all the words for you to approve. Photos from your phone are honestly fine — we'll make them look good.</p>
+                </details>
+                <details>
+                    <summary>What's a "web address" and do I need one?</summary>
+                    <p class="faq-a">It's the name people type in, like yourshop.com. It costs about $15 a year, it's registered in <em>your</em> name, and yes — you want one. We'll help you pick it and set it up.</p>
+                </details>
+                <details>
+                    <summary>Are there monthly fees?</summary>
+                    <p class="faq-a">No. The price on this page is the whole price. The only recurring cost is the web address (about $15 a year), and that goes to the registrar, not to us.</p>
+                </details>
+                <details>
+                    <summary>How fast is "about a week", really?</summary>
+                    <p class="faq-a">For a one-pager: your free mockup usually within a few days, then about a week from the moment you approve it. The Full Shop takes about two. If something will take longer, we'll say so up front.</p>
+                </details>
+                <details>
+                    <summary>What if I need changes later?</summary>
+                    <p class="faq-a">Send them over — small changes are $30 a time, done within a couple of days. Or we hand you the keys and show you how to make simple updates yourself, free.</p>
+                </details>
+                <details>
+                    <summary>What happens if you two disappear?</summary>
+                    <p class="faq-a">You'd be fine. You own the files, the words and the web address — nothing is locked to us. Any developer could pick it up tomorrow. That's the point of "you own everything".</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Contact ── -->
+    <section class="contact" id="contact">
+        <div class="wrap">
+            <div class="contact-head reveal t-center">
+                <span class="sec-kicker">No pressure, no pitch</span>
+                <h2 class="sec-title">Get your free mockup.</h2>
+                <p class="sec-sub">Tell us a little about your business. We'll reply within one working day — with a preview, not a sales pitch.</p>
+            </div>
+            <div class="contact-card reveal">
+                <form id="mockup-form" novalidate="false">
+                    <div class="field">
+                        <label for="f-name">Your name</label>
+                        <input id="f-name" name="name" type="text" autocomplete="name" required>
+                    </div>
+                    <div class="field">
+                        <label for="f-business">Business name</label>
+                        <input id="f-business" name="business" type="text" autocomplete="organization" required>
+                    </div>
+                    <div class="field">
+                        <label for="f-type">What kind of business?</label>
+                        <select id="f-type" name="type">
+                            <option>Barber or salon</option>
+                            <option>Café or restaurant</option>
+                            <option>Trades (plumber, electrician, builder…)</option>
+                            <option>Gym or fitness</option>
+                            <option>Shop</option>
+                            <option>Something else</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="f-phone">Phone <small>(optional)</small></label>
+                        <input id="f-phone" name="phone" type="tel" autocomplete="tel">
+                    </div>
+                    <div class="field">
+                        <label for="f-notes">Anything we should know? <small>(optional)</small></label>
+                        <textarea id="f-notes" name="notes" placeholder="e.g. I have a logo already, I want online booking…"></textarea>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Send — get my free mockup</button>
+                    <p class="panel error" id="form-error" hidden>Something didn't send. Email us directly at <a data-cfg="email" href="mailto:hello@example.com">hello@example.com</a> and we'll take it from there.</p>
+                </form>
+                <div class="panel" id="form-success" hidden>
+                    <strong>Got it — thank you!</strong>
+                    We'll reply within one working day with your free mockup.
+                </div>
+                <div class="panel" id="form-fallback" hidden>
+                    <strong>One more tap to send</strong>
+                    Your email app should have opened with everything filled in — just press send.
+                    If it didn't open, email us at <a data-cfg="email" href="mailto:hello@example.com">hello@example.com</a> with your name and business name.
+                </div>
+            </div>
+            <p class="form-alt">Prefer email? Write to <a data-cfg="email" href="mailto:hello@example.com">hello@example.com</a></p>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 <span data-cfg="name">Shopfront Studio</span> · Websites for local businesses in <span data-cfg="city">your area</span> · <a data-cfg="email" href="mailto:hello@example.com">hello@example.com</a></p>
+</footer>
+
+<a id="mailto-link" hidden aria-hidden="true" tabindex="-1"></a>
+
+<script>
+(() => {
+    'use strict';
+
+    /* ═════════════════ EDIT HERE ═════════════════
+       The whole page reads from this one object.
+       - email: replace with the business inbox.
+       - formspreeId: create a free form at formspree.io,
+         paste its ID (e.g. 'mabcdxyz') and the contact form
+         sends directly. While it's empty, the form falls back
+         to opening the visitor's email app instead.
+       - Also update <title> and <meta name="description">
+         in <head> if you change the name.
+       ═════════════════════════════════════════════ */
+    const CONFIG = {
+        name: 'Shopfront Studio',
+        city: 'your area',
+        email: 'hello@example.com',
+        formspreeId: ''
+    };
+
+    // ── Hydrate every [data-cfg] element from CONFIG ──
+    document.querySelectorAll('[data-cfg]').forEach(el => {
+        const val = CONFIG[el.dataset.cfg];
+        if (!val) return;
+        el.textContent = val;
+        if (el.dataset.cfg === 'email' && el.tagName === 'A') el.href = 'mailto:' + val;
+    });
+    document.title = CONFIG.name + ' — Websites for local businesses';
+
+    // ── Scroll engine: header, progress bar, parallax, steps line ──
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const header = document.getElementById('site-header');
+    const progressBar = document.getElementById('scroll-progress');
+    const heroBg = document.querySelector('.hero-bg');
+    const stepsEl = document.querySelector('.steps');
+    const stepEls = stepsEl ? Array.from(stepsEl.querySelectorAll('.step')) : [];
+    const duoEl = document.querySelector('.demo-duo');
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    let ticking = false;
+
+    if (reduceMotion) stepEls.forEach(s => s.classList.add('lit'));
+
+    function onScroll() {
+        ticking = false;
+        const y = window.scrollY;
+        const vh = window.innerHeight;
+        header.classList.toggle('scrolled', y > 24);
+
+        const max = document.documentElement.scrollHeight - vh;
+        if (progressBar && max > 0) progressBar.style.transform = 'scaleX(' + (y / max).toFixed(4) + ')';
+
+        if (reduceMotion) return;
+
+        if (heroBg && y < vh * 1.5) heroBg.style.transform = 'translateY(' + (y * 0.18).toFixed(1) + 'px)';
+
+        if (stepsEl) {
+            const r = stepsEl.getBoundingClientRect();
+            const p = clamp((vh * 0.82 - r.top) / (r.height + vh * 0.3), 0, 1);
+            stepsEl.style.setProperty('--sp', p.toFixed(3));
+            stepEls.forEach((s, i) => s.classList.toggle('lit', p >= (i + 0.55) / stepEls.length));
+        }
+
+        if (duoEl) {
+            const r = duoEl.getBoundingClientRect();
+            if (r.bottom > 0 && r.top < vh) {
+                const d = (r.top + r.height / 2 - vh / 2) / vh;
+                duoEl.style.setProperty('--duo-shift', clamp(-d * 46, -34, 34).toFixed(1) + 'px');
+            }
+        }
+    }
+    window.addEventListener('scroll', () => {
+        if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
+    }, { passive: true });
+    requestAnimationFrame(onScroll);
+
+    // ── Reveal on scroll, staggered per group (skipped for reduced motion) ──
+    document.querySelectorAll('[data-stagger]').forEach(group => {
+        Array.from(group.querySelectorAll('.reveal')).forEach((el, i) => {
+            el.style.transitionDelay = (i * 90) + 'ms';
+        });
+    });
+    const revealEls = document.querySelectorAll('.reveal');
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+        revealEls.forEach(el => el.classList.add('in'));
+    } else {
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (!e.isIntersecting) return;
+                const el = e.target;
+                el.classList.add('in');
+                obs.unobserve(el);
+                // clear the stagger delay once revealed so hover effects stay snappy
+                const d = parseFloat(el.style.transitionDelay) || 0;
+                setTimeout(() => { el.style.transitionDelay = ''; }, d + 700);
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        revealEls.forEach(el => obs.observe(el));
+    }
+
+    // ── Price count-up ──
+    const priceEls = document.querySelectorAll('[data-price]');
+    if (priceEls.length && !reduceMotion && 'IntersectionObserver' in window) {
+        const pObs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (!e.isIntersecting) return;
+                pObs.unobserve(e.target);
+                const el = e.target;
+                const target = parseInt(el.dataset.price, 10);
+                const t0 = performance.now();
+                const tick = now => {
+                    const p = Math.min((now - t0) / 1100, 1);
+                    el.textContent = Math.round(target * (1 - Math.pow(1 - p, 4)));
+                    if (p < 1) requestAnimationFrame(tick);
+                };
+                requestAnimationFrame(tick);
+            });
+        }, { threshold: 0.6 });
+        priceEls.forEach(el => pObs.observe(el));
+    }
+
+    // ── Smooth anchor scroll ──
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const href = a.getAttribute('href');
+            if (href.length < 2) return;
+            const target = document.querySelector(href);
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+            }
+        });
+    });
+
+    // ── Contact form ──
+    const form = document.getElementById('mockup-form');
+    const successPanel = document.getElementById('form-success');
+    const fallbackPanel = document.getElementById('form-fallback');
+    const errorPanel = document.getElementById('form-error');
+    const mailtoLink = document.getElementById('mailto-link');
+
+    form.addEventListener('submit', async e => {
+        e.preventDefault();
+        const data = new FormData(form);
+        const btn = form.querySelector('button[type="submit"]');
+
+        if (CONFIG.formspreeId) {
+            btn.disabled = true;
+            btn.textContent = 'Sending…';
+            try {
+                const res = await fetch('https://formspree.io/f/' + CONFIG.formspreeId, {
+                    method: 'POST',
+                    body: data,
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (!res.ok) throw new Error('send failed');
+                form.hidden = true;
+                successPanel.hidden = false;
+            } catch {
+                btn.disabled = false;
+                btn.textContent = 'Send — get my free mockup';
+                errorPanel.hidden = false;
+            }
+            return;
+        }
+
+        // No Formspree yet → open the visitor's email app, pre-filled.
+        const lines = [
+            'Name: ' + (data.get('name') || ''),
+            'Business: ' + (data.get('business') || ''),
+            'Type: ' + (data.get('type') || ''),
+            'Phone: ' + (data.get('phone') || '—'),
+            '',
+            data.get('notes') || ''
+        ];
+        mailtoLink.href = 'mailto:' + CONFIG.email
+            + '?subject=' + encodeURIComponent('Free mockup request — ' + (data.get('business') || 'my business'))
+            + '&body=' + encodeURIComponent(lines.join('\n'));
+        mailtoLink.click();
+        form.hidden = true;
+        fallbackPanel.hidden = false;
+    });
+})();
+</script>
+
+</body>
+</html>
