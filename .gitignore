@@ -1,9 +1,18 @@
+# ── PUBLIC (published to xela-cl.github.io): index.html, README.md only ──
+
 # Private / local-only — never publish
 build.sh
-outreach.md
-getting-paid.md
 projects/
 .claude/
 .DS_Store
 *.backup.html
 scratchpad/
+
+# Business playbooks & internal strategy — NEVER publish (whole strategy lives here)
+# Ignore every .md except the public README.
+*.md
+!README.md
+
+# Personal $10k tracker + brand source images (uploaded to X manually, not served)
+dashboard.html
+x-assets/
