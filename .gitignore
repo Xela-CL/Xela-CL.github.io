@@ -18,3 +18,6 @@ scratchpad/
 # Personal $10k tracker + brand source images (uploaded to X manually, not served)
 dashboard.html
 x-assets/
+
+# Parked ventures — local only, never publish
+parked/
