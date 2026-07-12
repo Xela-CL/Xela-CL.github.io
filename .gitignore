@@ -2,6 +2,8 @@
 
 # Private / local-only — never publish
 build.sh
+sprint.py
+__pycache__/
 projects/
 .claude/
 .DS_Store

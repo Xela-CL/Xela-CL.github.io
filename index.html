@@ -1,651 +1,533 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xela — Custom AI Development</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-            --bg: #09090f;
-            --bg2: #111118;
-            --bg3: #1a1a24;
-            --accent: #818cf8;
-            --accent2: #6366f1;
-            --text: #f8fafc;
-            --text2: #94a3b8;
-            --text3: #64748b;
-            --border: rgba(255,255,255,0.08);
-            --green: #34d399;
-        }
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-        }
-        a { color: inherit; text-decoration: none; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xela — custom trading tools, built by a trader</title>
+<meta name="description" content="Scanners, signal bots, journal automation and private AI assistants. Fixed price, 2–4 weeks, you own the code. Built by someone who actually trades.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23f6f3ec'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-weight='bold' font-size='42' fill='%231a1913'%3EX%3C/text%3E%3Ccircle cx='52' cy='44' r='5' fill='%230a7a3d'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+        --paper: #f6f3ec;
+        --paper-dim: #efeadf;
+        --ink: #1a1913;
+        --ink-soft: #4c493f;
+        --ink-faint: #8a8577;
+        --rule: rgba(26,25,19,0.16);
+        --rule-strong: rgba(26,25,19,0.55);
+        --green: #0a7a3d;
+        --red: #b3382c;
+        --term-bg: #171610;
+        --term-green: #8fd6a8;
+        --term-dim: #7d7a6c;
+        --serif: 'Fraunces', Georgia, serif;
+        --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    }
+    ::selection { background: var(--green); color: var(--paper); }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: var(--serif);
+        background: var(--paper);
+        color: var(--ink);
+        line-height: 1.6;
+        font-size: 17px;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: clip;
+    }
+    .hero > *, .row > *, .svc-row > *, .steps > * { min-width: 0; }
+    a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a:hover { color: var(--green); }
 
-        /* ── REVEAL ── */
-        .reveal {
-            opacity: 0;
-            transform: translateY(36px);
-            transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
-        }
-        .reveal.visible { opacity: 1; transform: none; }
-        [data-delay="1"] { transition-delay: 0.08s; }
-        [data-delay="2"] { transition-delay: 0.18s; }
-        [data-delay="3"] { transition-delay: 0.28s; }
-        [data-delay="4"] { transition-delay: 0.38s; }
+    .sheet { max-width: 1060px; margin: 0 auto; padding: 0 2rem; }
 
-        /* ── NAV ── */
-        nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1.25rem 2.5rem;
-            background: transparent;
-            border-bottom: 1px solid transparent;
-            transition: background 0.5s, backdrop-filter 0.5s, border-color 0.5s;
-        }
-        nav.scrolled {
-            background: rgba(9,9,15,0.88);
-            backdrop-filter: blur(20px);
-            border-bottom-color: var(--border);
-        }
-        .nav-logo { font-weight: 700; font-size: 1.1rem; letter-spacing: -0.02em; }
-        .nav-logo span { color: var(--accent); }
-        .btn {
-            display: inline-flex; align-items: center; gap: 0.4rem;
-            padding: 0.6rem 1.25rem; border-radius: 8px;
-            font-size: 0.875rem; font-weight: 600;
-            cursor: pointer; transition: all 0.15s; border: none; font-family: inherit;
-        }
-        .btn-primary { background: var(--accent2); color: white; }
-        .btn-primary:hover { background: #4f52d9; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(99,102,241,0.3); }
-        .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
-        .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+    .mono { font-family: var(--mono); }
+    .up { text-transform: uppercase; letter-spacing: 0.08em; }
+    .ok { color: var(--green); }
+    .bad { color: var(--red); }
 
-        /* ── HERO ── */
-        .hero {
-            min-height: 100vh;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            text-align: center;
-            padding: 6rem 1.5rem 4rem;
-            position: relative; overflow: hidden;
-        }
-        .hero-glow {
-            position: absolute; width: 900px; height: 900px;
-            background: radial-gradient(circle, rgba(99,102,241,0.13) 0%, transparent 65%);
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
-            pointer-events: none; will-change: transform;
-        }
-        .hero-glow-2 {
-            position: absolute; width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(192,132,252,0.07) 0%, transparent 70%);
-            top: 20%; left: 65%; pointer-events: none;
-        }
-        .badge {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            padding: 0.4rem 1rem; border-radius: 100px;
-            border: 1px solid rgba(99,102,241,0.3);
-            background: rgba(99,102,241,0.08);
-            color: var(--accent); font-size: 0.8rem; font-weight: 500;
-            margin-bottom: 2rem; position: relative;
-        }
-        .badge-dot {
-            width: 7px; height: 7px; border-radius: 50%;
-            background: var(--green); animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(52,211,153,0.5); }
-            50% { opacity:.8; box-shadow: 0 0 0 5px rgba(52,211,153,0); }
-        }
-        .hero h1 {
-            font-size: clamp(2.8rem, 7vw, 5.2rem);
-            font-weight: 800; letter-spacing: -0.045em; line-height: 1.04;
-            max-width: 840px; margin-bottom: 1.25rem; position: relative;
-        }
-        .hero h1 em {
-            font-style: normal;
-            background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #818cf8 100%);
-            background-size: 200% auto;
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            animation: shimmer 4s linear infinite;
-        }
-        @keyframes shimmer { to { background-position: 200% center; } }
-        .hero p {
-            font-size: 1.2rem; color: var(--text2);
-            max-width: 540px; margin-bottom: 2.5rem; line-height: 1.75; position: relative;
-        }
-        .hero-cta { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; position: relative; }
-        .hero-cta .btn { padding: 0.9rem 1.85rem; font-size: 1rem; }
-        .hero-stats {
-            display: flex; gap: 3.5rem;
-            margin-top: 5rem; padding-top: 2.5rem;
-            border-top: 1px solid var(--border); position: relative;
-        }
-        .stat-item { text-align: center; }
-        .stat-num { font-size: 1.85rem; font-weight: 700; letter-spacing: -0.03em; }
-        .stat-label { font-size: 0.78rem; color: var(--text3); margin-top: 0.25rem; }
+    /* ── DOCUMENT HEADER ─────────────────────────── */
+    header {
+        border-bottom: 2px solid var(--rule-strong);
+    }
+    .masthead {
+        display: flex; justify-content: space-between; align-items: baseline;
+        gap: 1rem; flex-wrap: wrap;
+        padding-top: 1.1rem; padding-bottom: 0.9rem;
+        font-family: var(--mono); font-size: 0.78rem;
+        text-transform: uppercase; letter-spacing: 0.08em;
+        color: var(--ink-soft);
+    }
+    .masthead .brand { font-weight: 600; color: var(--ink); font-size: 0.85rem; }
+    .masthead .brand em { font-style: normal; color: var(--green); }
+    .masthead a { text-decoration: none; border-bottom: 1px solid var(--rule); }
+    .masthead a:hover { border-color: var(--green); }
 
-        /* ── SECTION ── */
-        .section-wrap { padding: 7rem 2.5rem; max-width: 1200px; margin: 0 auto; }
-        .section-label {
-            font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
-            text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem;
-        }
-        .section-title {
-            font-size: clamp(2rem, 5vw, 3.2rem);
-            font-weight: 800; letter-spacing: -0.04em; line-height: 1.08; margin-bottom: 0.75rem;
-        }
-        .section-sub { color: var(--text2); font-size: 1.05rem; max-width: 480px; line-height: 1.75; }
+    /* ── HERO ────────────────────────────────────── */
+    .hero {
+        display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+        gap: 4rem; align-items: center;
+        padding: 5rem 0 4.5rem;
+        border-bottom: 1px solid var(--rule);
+    }
+    .kicker {
+        font-family: var(--mono); font-size: 0.72rem; font-weight: 500;
+        text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-faint);
+        margin-bottom: 1.6rem;
+    }
+    .kicker .live { color: var(--green); }
+    h1 {
+        font-size: clamp(2.4rem, 5.2vw, 3.9rem);
+        font-weight: 600; line-height: 1.08; letter-spacing: -0.015em;
+        margin-bottom: 1.5rem;
+        font-variation-settings: 'opsz' 100;
+    }
+    h1 .u {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 9' preserveAspectRatio='none'%3E%3Cpath d='M2 6 Q 20 2 40 5.5 T 78 5 T 118 4' fill='none' stroke='%230a7a3d' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: 0 100%; background-size: 100% 0.16em;
+        padding-bottom: 0.12em;
+    }
+    .hero-copy p.lede {
+        font-size: 1.15rem; line-height: 1.7; color: var(--ink-soft);
+        max-width: 34em; margin-bottom: 2.2rem;
+    }
+    .cta-row { display: flex; align-items: center; gap: 1.4rem; flex-wrap: wrap; }
+    .btn {
+        display: inline-block;
+        font-family: var(--mono); font-size: 0.82rem; font-weight: 600;
+        text-transform: uppercase; letter-spacing: 0.08em;
+        background: var(--ink); color: var(--paper);
+        padding: 0.85rem 1.5rem; border: 1px solid var(--ink); border-radius: 2px;
+        text-decoration: none; cursor: pointer;
+        transition: background 0.15s, border-color 0.15s;
+    }
+    .btn:hover { background: var(--green); border-color: var(--green); color: var(--paper); }
+    .cta-note { font-family: var(--mono); font-size: 0.76rem; color: var(--ink-faint); line-height: 1.8; }
 
-        /* ── SERVICES ── */
-        .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-top: 3.5rem; }
-        .service-card {
-            background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 2.25rem;
-            transition: border-color 0.3s, transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s;
-        }
-        .service-card:hover { border-color: rgba(99,102,241,0.4); transform: translateY(-5px); box-shadow: 0 24px 64px rgba(99,102,241,0.08); }
-        .service-icon { width: 50px; height: 50px; border-radius: 12px; background: rgba(99,102,241,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.5rem; }
-        .service-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
-        .service-card p { font-size: 0.875rem; color: var(--text2); line-height: 1.7; }
-        .service-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 1.5rem; }
-        .tag { padding: 0.2rem 0.55rem; border-radius: 6px; background: var(--bg3); color: var(--text3); font-size: 0.72rem; font-weight: 500; }
+    /* terminal */
+    .term {
+        background: var(--term-bg); border-radius: 4px;
+        border: 1px solid rgba(26,25,19,0.7);
+        box-shadow: 4px 4px 0 rgba(26,25,19,0.14);
+        overflow: hidden;
+    }
+    .term-bar {
+        display: flex; align-items: center; gap: 0.5rem;
+        padding: 0.5rem 0.9rem;
+        border-bottom: 1px solid rgba(246,243,236,0.12);
+        font-family: var(--mono); font-size: 0.68rem; color: var(--term-dim);
+    }
+    .term-bar i { width: 8px; height: 8px; border-radius: 50%; background: var(--term-dim); opacity: 0.5; font-style: normal; }
+    .term pre {
+        padding: 1rem 1.1rem 1.2rem;
+        font-family: var(--mono); font-size: 0.78rem; line-height: 1.85;
+        color: var(--term-green); overflow-x: auto;
+    }
+    .term pre .dim { color: var(--term-dim); }
+    .term pre .warn { color: #e0b45c; }
+    .cursor { display: inline-block; animation: blink 1.1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .term-caption {
+        font-family: var(--mono); font-size: 0.7rem; color: var(--ink-faint);
+        margin-top: 0.7rem; line-height: 1.7;
+    }
 
-        /* ── BOTS CINEMATIC SCROLL ── */
-        .bots-intro { padding: 7rem 2.5rem 1rem; max-width: 1200px; margin: 0 auto; }
+    /* ── SECTION HEADINGS ────────────────────────── */
+    section { padding: 4.2rem 0 4.6rem; border-bottom: 1px solid var(--rule); }
+    .sec-head {
+        display: flex; align-items: baseline; gap: 1.2rem;
+        margin-bottom: 0.9rem;
+    }
+    .sec-num {
+        font-family: var(--mono); font-size: 0.78rem; font-weight: 600;
+        color: var(--green); letter-spacing: 0.1em;
+    }
+    h2 {
+        font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+        font-weight: 600; letter-spacing: -0.01em; line-height: 1.15;
+    }
+    .sec-sub { color: var(--ink-soft); max-width: 40em; font-size: 1.02rem; }
 
-        .bots-scroll-wrapper { position: relative; height: 875vh; }
-        .bots-sticky {
-            position: sticky; top: 0; height: 100vh; overflow: hidden;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .bots-stage { position: absolute; inset: 0; }
+    /* ── LEDGER (builds) ─────────────────────────── */
+    .ledger { margin-top: 2.6rem; border-top: 2px solid var(--rule-strong); }
+    .ledger-cols {
+        display: grid; grid-template-columns: 64px 1fr 330px; gap: 2rem;
+        padding: 0.55rem 0;
+        font-family: var(--mono); font-size: 0.66rem; font-weight: 600;
+        text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-faint);
+        border-bottom: 1px solid var(--rule);
+    }
+    .row {
+        display: grid; grid-template-columns: 64px 1fr 330px; gap: 2rem;
+        padding: 1.8rem 0 2rem;
+        border-bottom: 1px solid var(--rule);
+    }
+    .row-num { font-family: var(--mono); font-size: 0.8rem; color: var(--ink-faint); padding-top: 0.45rem; }
+    .ticker {
+        display: inline-flex; align-items: center; gap: 0.45rem;
+        font-family: var(--mono); font-size: 0.72rem; font-weight: 600;
+        letter-spacing: 0.08em; color: var(--ink-soft); margin-bottom: 0.35rem;
+    }
+    .ticker i { width: 9px; height: 9px; border-radius: 1px; font-style: normal; }
+    .row h3 { font-size: 1.55rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 0.45rem; }
+    .row .what { color: var(--ink-soft); font-size: 0.98rem; max-width: 32em; }
+    .row .stack { font-family: var(--mono); font-size: 0.7rem; color: var(--ink-faint); margin-top: 0.8rem; }
+    .honest {
+        border-left: 2px solid var(--rule-strong); padding-left: 1.2rem;
+        font-family: var(--mono); font-size: 0.78rem; line-height: 1.8; color: var(--ink-soft);
+        align-self: center;
+    }
+    .honest .hn-label {
+        display: block; font-size: 0.62rem; font-weight: 600; text-transform: uppercase;
+        letter-spacing: 0.14em; color: var(--ink-faint); margin-bottom: 0.4rem;
+    }
+    .ledger-note {
+        font-family: var(--mono); font-size: 0.75rem; color: var(--ink-faint);
+        margin-top: 1.4rem; max-width: 52em; line-height: 1.8;
+    }
 
-        .bot-panel {
-            position: absolute; inset: 0;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; padding: 2rem 1.5rem;
-            opacity: 0; visibility: hidden;
-            transition: opacity .55s cubic-bezier(0.16,1,0.3,1), visibility .55s;
-        }
-        .bot-panel.active { opacity: 1; visibility: visible; }
+    /* ── SERVICES ────────────────────────────────── */
+    .svc { border-top: 2px solid var(--rule-strong); margin-top: 2.6rem; }
+    .svc-row {
+        display: grid; grid-template-columns: 64px 1fr 220px; gap: 2rem;
+        padding: 1.7rem 0; border-bottom: 1px solid var(--rule); align-items: baseline;
+    }
+    .svc-row h3 { font-size: 1.35rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .svc-row p { color: var(--ink-soft); font-size: 0.98rem; max-width: 36em; }
+    .svc-price { font-family: var(--mono); font-size: 0.76rem; color: var(--ink-soft); text-align: right; line-height: 1.8; }
+    .terms {
+        margin-top: 1.6rem; padding: 1.1rem 1.3rem;
+        border: 1px solid var(--rule-strong); border-radius: 2px;
+        font-family: var(--mono); font-size: 0.78rem; line-height: 2; color: var(--ink-soft);
+        background: var(--paper-dim);
+    }
+    .terms b { color: var(--ink); font-weight: 600; }
 
-        .bot-tile {
-            width: 190px; height: 190px; border-radius: 46px;
-            background: radial-gradient(circle at 50% 32%, #17171f, #0b0b12 72%);
-            border: 1px solid rgba(255,255,255,0.09);
-            display: flex; align-items: center; justify-content: center;
-            position: relative; margin-bottom: 2.25rem;
-            box-shadow: 0 40px 90px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
-            transform: translateY(var(--tileY, 30px)) scale(var(--tileS, 0.82));
-            opacity: var(--tileO, 0);
-            will-change: transform, opacity;
-        }
-        .bot-tile::before {
-            content: ''; position: absolute; inset: -22%;
-            border-radius: 50%; background: var(--halo, #7c3aed);
-            filter: blur(58px); opacity: calc(var(--tileO, 0) * 0.55);
-            z-index: -1;
-        }
-        .bot-tile svg { width: 116px; height: 116px; }
+    /* ── PROCESS ─────────────────────────────────── */
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; margin-top: 2.6rem; border-top: 2px solid var(--rule-strong); }
+    .step { padding-top: 1.4rem; }
+    .step .n { font-family: var(--mono); font-size: 0.72rem; font-weight: 600; color: var(--green); letter-spacing: 0.1em; }
+    .step h3 { font-size: 1.2rem; font-weight: 600; margin: 0.5rem 0 0.5rem; }
+    .step p { color: var(--ink-soft); font-size: 0.95rem; }
 
-        .bot-role {
-            font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em;
-            text-transform: uppercase; color: var(--tint, var(--accent));
-            opacity: var(--headO, 0); transform: translateY(var(--headY, 10px));
-        }
-        .bot-name {
-            font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 800;
-            letter-spacing: -0.045em; line-height: 1; margin: 0.55rem 0 0; color: var(--text);
-            opacity: var(--headO, 0); transform: translateY(var(--headY, 10px));
-        }
-        .bot-desc {
-            font-size: 1.12rem; line-height: 1.7; color: var(--text2);
-            max-width: 540px; margin: 1.6rem 0 0;
-            opacity: var(--descO, 0); transform: translateY(var(--descY, -34px));
-        }
-        .bot-tags {
-            display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;
-            margin-top: 1.7rem;
-            opacity: var(--tagO, 0); transform: translateY(var(--tagY, -16px));
-        }
+    /* ── STRAIGHT ANSWERS ────────────────────────── */
+    .qa { margin-top: 2.4rem; max-width: 46em; }
+    .qa-item { padding: 1.6rem 0; border-top: 1px solid var(--rule); }
+    .qa-item:first-child { border-top: 2px solid var(--rule-strong); }
+    .qa-item h3 { font-size: 1.25rem; font-weight: 600; font-style: italic; margin-bottom: 0.6rem; }
+    .qa-item h3::before { content: 'Q · '; font-style: normal; font-family: var(--mono); font-size: 0.75rem; color: var(--green); font-weight: 600; vertical-align: 0.15em; }
+    .qa-item p { color: var(--ink-soft); font-size: 1rem; }
 
-        .bots-rail {
-            position: absolute; left: 2.75rem; top: 50%; transform: translateY(-50%);
-            display: flex; flex-direction: column; gap: 0.85rem; z-index: 6;
-        }
-        .bots-rail-dot {
-            width: 8px; height: 8px; border-radius: 50%;
-            background: rgba(255,255,255,0.16); transition: all .45s cubic-bezier(0.16,1,0.3,1);
-        }
-        .bots-rail-dot.active { background: var(--accent2); height: 28px; }
+    /* ── FORM ────────────────────────────────────── */
+    .request-form { margin-top: 2.6rem; max-width: 700px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem; }
+    .form-field { display: flex; flex-direction: column; gap: 0.45rem; }
+    .form-full { grid-column: 1/-1; }
+    .form-field label {
+        font-family: var(--mono); font-size: 0.68rem; font-weight: 600;
+        text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-soft);
+    }
+    .form-field input, .form-field textarea, .form-field select {
+        background: transparent;
+        border: 1px solid var(--rule-strong); border-radius: 2px;
+        color: var(--ink); font-family: var(--mono); font-size: 0.85rem;
+        padding: 0.75rem 0.9rem; outline: none; -webkit-appearance: none;
+        transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .form-field input::placeholder, .form-field textarea::placeholder { color: var(--ink-faint); }
+    .form-field select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234c493f' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 0.9rem center;
+        padding-right: 2.4rem; cursor: pointer;
+    }
+    .form-field input:focus, .form-field textarea:focus, .form-field select:focus {
+        border-color: var(--green); box-shadow: 2px 2px 0 rgba(10,122,61,0.2);
+    }
+    .form-field textarea { resize: vertical; min-height: 140px; line-height: 1.7; }
+    .form-submit { display: flex; flex-direction: column; justify-content: flex-end; }
+    .form-submit .btn { width: 100%; }
+    .form-privacy { font-family: var(--mono); font-size: 0.72rem; color: var(--ink-faint); margin-top: 1rem; }
+    .form-success { display: none; padding: 2.5rem 0; }
+    .form-success h3 { font-size: 1.35rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .form-success h3::before { content: '✓ '; color: var(--green); }
+    .form-success p { color: var(--ink-soft); }
 
-        @media (max-width: 768px) {
-            .bots-scroll-wrapper { height: auto; }
-            .bots-sticky { position: relative; height: auto; display: block; padding: 1rem 0 3rem; }
-            .bots-stage { position: relative; inset: auto; }
-            .bot-panel {
-                position: relative; inset: auto; opacity: 1; visibility: visible;
-                padding: 3.5rem 1.5rem; border-top: 1px solid var(--border);
-            }
-            .bot-tile { opacity: 1; transform: none; width: 150px; height: 150px; border-radius: 38px; }
-            .bot-tile svg { width: 92px; height: 92px; }
-            .bot-role, .bot-name, .bot-desc, .bot-tags { opacity: 1; transform: none; }
-            .bots-rail { display: none; }
-        }
+    /* ── FOOTER ──────────────────────────────────── */
+    footer { border-top: 2px solid var(--rule-strong); }
+    .foot {
+        display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+        padding-top: 1.4rem; padding-bottom: 2.2rem;
+        font-family: var(--mono); font-size: 0.72rem; color: var(--ink-faint);
+        text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .foot a { text-decoration: none; border-bottom: 1px solid var(--rule); color: var(--ink-soft); }
+    .foot a:hover { border-color: var(--green); }
 
-        /* ── PROCESS STICKY ── */
-        .process-scroll-wrapper { position: relative; height: 290vh; background: var(--bg2); }
-        .process-sticky {
-            position: sticky; top: 0; height: 100vh;
-            display: flex; align-items: center;
-            padding: 0 2.5rem;
-            max-width: 1200px; margin: 0 auto;
-            gap: 8rem;
+    /* ── RESPONSIVE ──────────────────────────────── */
+    @media (max-width: 900px) {
+        .hero { grid-template-columns: 1fr; gap: 3rem; padding: 3.5rem 0 3.5rem; }
+        .row, .ledger-cols { grid-template-columns: 44px 1fr; }
+        .ledger-cols span:last-child { display: none; }
+        .honest {
+            grid-column: 2; border-left: none; padding-left: 0;
+            border-top: 1px dashed var(--rule-strong); padding-top: 1rem; margin-top: 1.1rem;
+            align-self: start;
         }
-        .process-left { flex: 0 0 280px; }
-        .process-section-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 2rem; }
-        .process-step-big {
-            font-size: 7rem; font-weight: 800; letter-spacing: -0.06em; line-height: 1;
-            background: linear-gradient(135deg, #818cf8, #c084fc);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            margin-bottom: 2rem;
-        }
-        .process-dots { display: flex; gap: 0.5rem; }
-        .process-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); transition: background 0.4s, transform 0.4s; }
-        .process-dot.active { background: var(--accent2); transform: scale(1.5); }
-        .process-right { flex: 1; position: relative; min-height: 280px; }
-        .process-step-item {
-            position: absolute; top: 50%; transform: translateY(calc(-50% + 24px));
-            opacity: 0;
-            transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1), transform 0.5s cubic-bezier(0.16,1,0.3,1);
-            pointer-events: none;
-        }
-        .process-step-item.active { opacity: 1; transform: translateY(-50%); pointer-events: auto; }
-        .process-step-title { font-size: clamp(2.5rem,4vw,3.5rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.08; margin-bottom: 1.25rem; }
-        .process-step-desc { font-size: 1.1rem; color: var(--text2); line-height: 1.75; max-width: 480px; }
-
-        /* ── FORM ── */
-        .form-section { padding: 7rem 2.5rem; max-width: 1200px; margin: 0 auto; }
-        .request-form { margin-top: 3rem; max-width: 680px; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .form-field { display: flex; flex-direction: column; gap: 0.45rem; }
-        .form-full { grid-column: 1/-1; }
-        .form-field label { font-size: 0.8rem; font-weight: 500; color: var(--text2); }
-        .form-field input, .form-field textarea, .form-field select {
-            background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
-            color: var(--text); font-family: inherit; font-size: 0.9rem;
-            padding: 0.75rem 1rem;
-            transition: border-color 0.15s, box-shadow 0.15s;
-            outline: none; -webkit-appearance: none;
-        }
-        .form-field select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2364748b' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat; background-position: right 1rem center;
-            background-color: var(--bg2); padding-right: 2.5rem; cursor: pointer;
-        }
-        .form-field input:focus, .form-field textarea:focus, .form-field select:focus {
-            border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
-        }
-        .form-field textarea { resize: vertical; min-height: 130px; line-height: 1.65; }
-        .form-submit { display: flex; flex-direction: column; justify-content: flex-end; }
-        .form-submit .btn { width: 100%; justify-content: center; padding: 0.8rem 1rem; }
-        .form-success { display: none; padding: 3rem 0; }
-        .success-icon { width: 60px; height: 60px; border-radius: 50%; background: rgba(52,211,153,0.1); color: var(--green); font-size: 1.5rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
-        .form-success h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.4rem; letter-spacing: -0.02em; }
-        .form-success p { color: var(--text2); }
-
-        footer { text-align: center; padding: 2.5rem; border-top: 1px solid var(--border); color: var(--text3); font-size: 0.82rem; }
-        footer a { color: var(--accent); }
-
-        /* ── RESPONSIVE ── */
-        @media (max-width: 768px) {
-            .services-grid { grid-template-columns: 1fr; }
-            .process-scroll-wrapper { height: auto; }
-            .process-sticky { position: relative; height: auto; flex-direction: column; gap: 2rem; padding: 5rem 1.5rem; }
-            .process-step-item { position: relative; top: auto; transform: none; opacity: 1; }
-            .process-step-item.active { transform: none; }
-            .process-right { min-height: auto; }
-        }
-        @media (max-width: 640px) {
-            nav { padding: 1rem 1.25rem; }
-            .hero-stats { gap: 2rem; }
-            .hero-cta { flex-direction: column; width: 100%; max-width: 300px; }
-            .hero-cta .btn { justify-content: center; }
-            .section-wrap, .form-section, .bots-intro { padding-left: 1.25rem; padding-right: 1.25rem; }
-            .form-grid { grid-template-columns: 1fr; }
-            .form-full { grid-column: 1; }
-        }
-    </style>
+        .svc-row { grid-template-columns: 44px 1fr; }
+        .svc-price { grid-column: 2; text-align: left; }
+        .steps { grid-template-columns: 1fr; gap: 0; }
+        .step { border-bottom: 1px solid var(--rule); padding-bottom: 1.4rem; }
+        .step:last-child { border-bottom: none; }
+    }
+    @media (max-width: 900px) {
+        .masthead .m-doc { display: none; }
+    }
+    @media (max-width: 640px) {
+        body { font-size: 16px; }
+        .sheet { padding: 0 1.2rem; }
+        .form-grid { grid-template-columns: 1fr; }
+        .form-full { grid-column: 1; }
+        .masthead { font-size: 0.68rem; }
+        .masthead .m-date { display: none; }
+        .term pre { font-size: 0.7rem; }
+        .term-caption br { display: none; }
+    }
+</style>
 </head>
 <body>
 
-<nav id="main-nav">
-    <div class="nav-logo">Xela<span>.</span></div>
-    <a href="#request" class="btn btn-primary">Start a project</a>
-</nav>
+<header>
+    <div class="sheet masthead">
+        <div class="brand">XELA<em>.</em> — CUSTOM TOOLS FOR TRADERS</div>
+        <div class="m-doc">DOC 001 · PORTFOLIO &amp; RATES</div>
+        <div class="m-date">LAST UPDATED — 12 JUL 2026</div>
+        <a href="mailto:getxela@gmail.com">getxela@gmail.com</a>
+    </div>
+</header>
 
 <!-- ── HERO ── -->
-<div class="hero">
-    <div class="hero-glow" id="hero-glow"></div>
-    <div class="hero-glow-2"></div>
-    <div class="badge reveal"><span class="badge-dot"></span>Available for new projects · July 2026</div>
-    <h1 class="reveal" data-delay="1">I build <em>AI tools</em><br>that actually work.</h1>
-    <p class="reveal" data-delay="2">Custom trading tools, automations, and AI assistants — built by someone who actually trades. Shipped in weeks, not months, and you own the code.</p>
-    <div class="hero-cta reveal" data-delay="3">
-        <a href="#request" class="btn btn-primary">Start a project →</a>
-        <a href="#work" class="btn btn-outline">See my work</a>
-    </div>
-    <div class="hero-stats reveal" data-delay="4">
-        <div class="stat-item">
-            <div class="stat-num" data-count="5" data-suffix="+">5+</div>
-            <div class="stat-label">AI systems shipped</div>
+<div class="sheet">
+    <div class="hero">
+        <div class="hero-copy">
+            <div class="kicker"><span class="live">●</span> Taking builds — two slots at a time · Alex, trader &amp; builder</div>
+            <h1>I trade. I got tired of tools built by people <span class="u">who don't</span>.</h1>
+            <p class="lede">So I built my own — a confluence scanner with a risk engine, a signal bot whose backtester refuses to go live on a negative edge. Now I build them for clients: scanners, alert bots, journal automation, private AI assistants.</p>
+            <div class="cta-row">
+                <a href="#request" class="btn">Tell me what you need</a>
+                <div class="cta-note">Fixed price · $800 floor<br>2–4 weeks · you own the code</div>
+            </div>
         </div>
-        <div class="stat-item">
-            <div class="stat-num" data-count="117">117</div>
-            <div class="stat-label">Tests passing</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-num">2–4 wks</div>
-            <div class="stat-label">Typical delivery</div>
-        </div>
-    </div>
-</div>
-
-<!-- ── SERVICES ── -->
-<div class="section-wrap">
-    <div class="section-label reveal">Services</div>
-    <h2 class="section-title reveal" data-delay="1">Three things I do well</h2>
-    <p class="section-sub reveal" data-delay="2">Everything I build is yours — no black-box SaaS you depend on forever.</p>
-    <div class="services-grid">
-        <div class="service-card reveal" data-delay="1">
-            <div class="service-icon">📈</div>
-            <h3>Trading Tools</h3>
-            <p>Signal bots, trade journal automation, market scanners, backtesters that refuse a negative edge. Built for traders, by one who trades.</p>
-            <div class="service-tags"><span class="tag">Binance API</span><span class="tag">TradingView Pine</span><span class="tag">Alerts</span><span class="tag">Backtesting</span></div>
-        </div>
-        <div class="service-card reveal" data-delay="2">
-            <div class="service-icon">⚡</div>
-            <h3>Automation Pipelines</h3>
-            <p>Replace manual, repetitive work with LLM-powered pipelines. Research, reporting, email drafting, data extraction — automated.</p>
-            <div class="service-tags"><span class="tag">Multi-agent</span><span class="tag">Scheduling</span><span class="tag">Webhooks</span><span class="tag">Telegram</span></div>
-        </div>
-        <div class="service-card reveal" data-delay="3">
-            <div class="service-icon">🤖</div>
-            <h3>Private AI Assistants</h3>
-            <p>A custom AI that knows your business, your docs, and your workflows. Runs locally or on your server. Your data never leaves.</p>
-            <div class="service-tags"><span class="tag">RAG</span><span class="tag">Memory</span><span class="tag">Claude API</span><span class="tag">Local LLM</span></div>
+        <div>
+            <figure class="term">
+                <div class="term-bar"><i></i><i></i><i></i>&nbsp;alex@desk — zsh</div>
+                <pre>$ edge status
+scanner   <span class="dim">·</span> running <span class="dim">— BTC ETH SOL · 15m/1h/4h</span>
+risk      <span class="dim">·</span> armed <span class="dim">— breaker dormant (0/20 resolved)</span>
+journal   <span class="dim">·</span> 1 open, 0 resolved
+verdict   <span class="dim">·</span> <span class="warn">edge unmeasured — keep logging</span>
+$ <span class="cursor">▌</span></pre>
+            </figure>
+            <div class="term-caption">My own desk. Yes, the journal is young — that's the point: <br>I measure before I trust. Yours gets built the same way.</div>
         </div>
     </div>
 </div>
 
-<!-- ── BOTS CINEMATIC SCROLL ── -->
-<section class="bots-intro" id="work">
-    <div class="section-label reveal">Work</div>
-    <h2 class="section-title reveal" data-delay="1">Things I built for myself</h2>
-    <p class="section-sub reveal" data-delay="2">Five systems I built for my own trading and workflow — proof I ship real software, not products for sale. Yours gets built the same way.</p>
-</section>
+<!-- ── BUILDS LEDGER ── -->
+<div class="sheet">
+    <section id="work">
+        <div class="sec-head"><span class="sec-num">01</span><h2>The builds</h2></div>
+        <p class="sec-sub">Five systems I made for my own trading and workflow. Proof I ship real software — not products for sale. Each one listed with its least flattering number.</p>
 
-<div class="bots-scroll-wrapper" id="bots-wrapper">
-    <div class="bots-sticky">
-        <div class="bots-rail">
-            <div class="bots-rail-dot active"></div>
-            <div class="bots-rail-dot"></div>
-            <div class="bots-rail-dot"></div>
-            <div class="bots-rail-dot"></div>
-            <div class="bots-rail-dot"></div>
-        </div>
-        <div class="bots-stage">
+        <div class="ledger">
+            <div class="ledger-cols"><span>No.</span><span>System</span><span>Honest number</span></div>
 
-            <!-- EDGE -->
-            <div class="bot-panel active" style="--tint:#38bdf8; --halo:#0ea5e9;">
-                <div class="bot-tile"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="eLb" x1="8" y1="26" x2="22" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#7ee8ff"/><stop offset="1" stop-color="#38a0f0"/></linearGradient><linearGradient id="eLt" x1="22" y1="26" x2="48" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#2dd4bf"/><stop offset="1" stop-color="#059669"/></linearGradient><filter id="eLf" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(#eLf)"><polygon points="8,6 22,6 22,46 8,46" fill="url(#eLb)"/><polygon points="8,6 14,6 14,46 8,46" fill="white" opacity=".15"/><polygon points="22,6 46,6 40,16 22,16" fill="url(#eLt)"/><polygon points="22,22 40,22 34,32 22,32" fill="url(#eLt)"/><polygon points="22,36 46,36 40,46 22,46" fill="url(#eLt)"/></g></svg></div>
-                <div class="bot-role">Trading Bot</div>
-                <h3 class="bot-name">Edge</h3>
-                <p class="bot-desc">Algorithmic trading system: multi-timeframe confluence scanner, a Layer 2 risk engine with circuit breaker, and a live mission-control dashboard with Telegram alerts.</p>
-                <div class="bot-tags"><span class="tag">Python</span><span class="tag">Telegram</span><span class="tag">Risk Engine</span></div>
+            <div class="row">
+                <div class="row-num">01</div>
+                <div>
+                    <div class="ticker"><i style="background:#0e7bb3"></i>$EDGE — TRADING BOT</div>
+                    <h3>Edge</h3>
+                    <p class="what">Multi-timeframe confluence scanner with a Layer-2 risk engine, circuit breaker, Telegram alerts, and a live mission-control dashboard.</p>
+                    <div class="stack">PYTHON · TELEGRAM · RISK ENGINE</div>
+                </div>
+                <div class="honest"><span class="hn-label">Honest number</span>The breaker has never tripped — it stays <b>dormant until 20 resolved trades</b>. Journal today: 1 open, 0 resolved.</div>
             </div>
 
-            <!-- FLUX -->
-            <div class="bot-panel" style="--tint:#f0409a; --halo:#c0208e;">
-                <div class="bot-tile"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="fL" x1="26" y1="48" x2="40" y2="4" gradientUnits="userSpaceOnUse"><stop stop-color="#ff7a00"/><stop offset=".45" stop-color="#ff3d7f"/><stop offset="1" stop-color="#c040ff"/></linearGradient><mask id="fLm"><rect x="28" y="4" width="13" height="44" fill="white"/><rect x="28" y="4" width="19" height="11" rx="5.5" fill="white"/><rect x="28" y="23" width="14" height="10" rx="5" fill="white"/><rect x="7" y="19" width="19" height="9" rx="4.5" fill="white"/><rect x="10" y="31" width="16" height="9" rx="4.5" fill="white" opacity=".7"/><rect x="14" y="42" width="12" height="8" rx="4" fill="white" opacity=".45"/></mask><filter id="fLf" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="52" height="52" fill="url(#fL)" mask="url(#fLm)" filter="url(#fLf)"/></svg></div>
-                <div class="bot-role">Signal Bot</div>
-                <h3 class="bot-name">Flux</h3>
-                <p class="bot-desc">Crypto signal bot on 1-hour bars. EMA200 trend gate, ATR-based trailing exits. A built-in backtester refuses to go live on a negative edge.</p>
-                <div class="bot-tags"><span class="tag">Python</span><span class="tag">Binance</span><span class="tag">EMA · ATR</span></div>
+            <div class="row">
+                <div class="row-num">02</div>
+                <div>
+                    <div class="ticker"><i style="background:#c2377b"></i>$FLUX — SIGNAL BOT</div>
+                    <h3>Flux</h3>
+                    <p class="what">Crypto signals on 1-hour bars: EMA200 trend gate, ATR trailing exits, and a built-in backtester that reports R-expectancy.</p>
+                    <div class="stack">PYTHON · BINANCE · EMA/ATR</div>
+                </div>
+                <div class="honest"><span class="hn-label">Honest number</span>Backtester verdict on my favourite config: <span class="bad">REFUSED</span> — negative expectancy. So it sits until the numbers earn it.</div>
             </div>
 
-            <!-- ODDS -->
-            <div class="bot-panel" style="--tint:#818cf8; --halo:#6366f1;">
-                <div class="bot-tile"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="oL" x1="46" y1="8" x2="8" y2="46" gradientUnits="userSpaceOnUse"><stop stop-color="#a78bfa"/><stop offset=".6" stop-color="#7c3aed"/><stop offset="1" stop-color="#3b1d7a"/></linearGradient><filter id="oLf" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="oLd" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M13,39 A18,18 0 1 1 10,35" fill="none" stroke="url(#oL)" stroke-width="8" stroke-linecap="round" filter="url(#oLf)"/><circle cx="13" cy="39" r="4" fill="white" filter="url(#oLd)"/><text x="26" y="27" text-anchor="middle" dominant-baseline="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="800" font-size="17" fill="#b49eff" filter="url(#oLf)">%</text></svg></div>
-                <div class="bot-role">Research Bot</div>
-                <h3 class="bot-name">Odds</h3>
-                <p class="bot-desc">Polymarket prediction-market scanner. Alerts only when its model and the market price disagree by 12+ points at real liquidity — and every call gets Brier-scored against the market when it resolves.</p>
-                <div class="bot-tags"><span class="tag">Python</span><span class="tag">Claude API</span><span class="tag">Polymarket</span></div>
+            <div class="row">
+                <div class="row-num">03</div>
+                <div>
+                    <div class="ticker"><i style="background:#5b52c7"></i>$ODDS — RESEARCH BOT</div>
+                    <h3>Odds</h3>
+                    <p class="what">Polymarket scanner. Alerts only when its model and the market price disagree by 12+ points at real liquidity.</p>
+                    <div class="stack">PYTHON · CLAUDE API · POLYMARKET</div>
+                </div>
+                <div class="honest"><span class="hn-label">Honest number</span>Every call gets <b>Brier-scored against the market</b> when it resolves — the bot keeps its own report card.</div>
             </div>
 
-            <!-- KEEL -->
-            <div class="bot-panel" style="--tint:#2dd4bf; --halo:#0d9488;">
-                <div class="bot-tile"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="kL" x1="26" y1="4" x2="26" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#5eead4"/><stop offset="1" stop-color="#0d9488"/></linearGradient><filter id="kLf" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(#kLf)" stroke="url(#kL)" stroke-width="4.5" stroke-linecap="round"><circle cx="26" cy="10" r="4.5"/><path d="M26 15 V 44"/><path d="M16 23 H 36"/><path d="M9 30 A 17 17 0 0 0 43 30"/></g></svg></div>
-                <div class="bot-role">Investing Advisor</div>
-                <h3 class="bot-name">Keel</h3>
-                <p class="bot-desc">Long-term ETF advisor: VTI/VXUS/BND core, 200-day trend overlay, DCA and threshold rebalancing. Backtest honestly reported — the overlay cut drawdown but lagged buy-and-hold on return.</p>
-                <div class="bot-tags"><span class="tag">Python</span><span class="tag">Yahoo Finance</span><span class="tag">Backtesting</span></div>
+            <div class="row">
+                <div class="row-num">04</div>
+                <div>
+                    <div class="ticker"><i style="background:#0d8577"></i>$KEEL — INVESTING ADVISOR</div>
+                    <h3>Keel</h3>
+                    <p class="what">Long-term ETF advisor: VTI/VXUS/BND core, 200-day trend overlay, DCA and threshold rebalancing.</p>
+                    <div class="stack">PYTHON · YAHOO FINANCE · BACKTESTING</div>
+                </div>
+                <div class="honest"><span class="hn-label">Honest number</span>Backtest: the overlay <span class="ok">cut drawdown</span> but <span class="bad">lagged buy-and-hold</span> on return. Published anyway.</div>
             </div>
 
-            <!-- JARVIS -->
-            <div class="bot-panel" style="--tint:#a78bfa; --halo:#7c3aed;">
-                <div class="bot-tile"><svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="jL" x1="26" y1="4" x2="26" y2="50" gradientUnits="userSpaceOnUse"><stop stop-color="#c084fc"/><stop offset="1" stop-color="#7c3aed"/></linearGradient><mask id="jLm"><rect x="14" y="4" width="26" height="11" rx="5.5" fill="white"/><rect x="28" y="4" width="12" height="36" fill="white"/><path d="M28 40 Q28 50 20 50 Q11 50 11 42" stroke="white" stroke-width="12" stroke-linecap="round" fill="none"/></mask><filter id="jLf" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect width="52" height="52" fill="url(#jL)" mask="url(#jLm)" filter="url(#jLf)"/></svg></div>
-                <div class="bot-role">AI Assistant</div>
-                <h3 class="bot-name">Jarvis</h3>
-                <p class="bot-desc">Local-first AI assistant with 4 specialized agents — research, web, voice, and scheduling. Vector memory, RAG knowledge base, runs 100% offline.</p>
-                <div class="bot-tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Ollama</span><span class="tag">ChromaDB</span></div>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<!-- ── PROCESS ── -->
-<div class="process-scroll-wrapper" id="process-wrapper">
-    <div class="process-sticky" id="process-sticky-inner">
-        <div class="process-left">
-            <div class="process-section-label">Process</div>
-            <div class="process-step-big" id="process-big-num">01</div>
-            <div class="process-dots">
-                <div class="process-dot active" id="dot-0"></div>
-                <div class="process-dot" id="dot-1"></div>
-                <div class="process-dot" id="dot-2"></div>
+            <div class="row">
+                <div class="row-num">05</div>
+                <div>
+                    <div class="ticker"><i style="background:#8352c7"></i>$JRVS — AI ASSISTANT</div>
+                    <h3>Jarvis</h3>
+                    <p class="what">Local-first AI assistant: four specialized agents, vector memory, RAG knowledge base, voice. Runs 100% offline.</p>
+                    <div class="stack">PYTHON · FASTAPI · OLLAMA · CHROMADB</div>
+                </div>
+                <div class="honest"><span class="hn-label">Honest number</span><b>117 tests passing</b>, zero cloud calls. My data never leaves the machine — neither would yours.</div>
             </div>
         </div>
-        <div class="process-right">
-            <div class="process-step-item active" id="step-0">
-                <h3 class="process-step-title">Discovery<br>call</h3>
-                <p class="process-step-desc">30 minutes. Tell me what you need — I'll tell you if I can build it and what it'll cost. No commitment required.</p>
-            </div>
-            <div class="process-step-item" id="step-1">
-                <h3 class="process-step-title">Fixed<br>proposal</h3>
-                <p class="process-step-desc">Fixed price, agreed up front. Scope locked in writing before I start. You approve everything before a line of code gets written.</p>
-            </div>
-            <div class="process-step-item" id="step-2">
-                <h3 class="process-step-title">Build +<br>handoff</h3>
-                <p class="process-step-desc">Weekly check-ins. You see it working before final delivery. Full code handoff — you own it forever, no subscriptions.</p>
-            </div>
-        </div>
-    </div>
-</div>
+        <p class="ledger-note">* Unflattering numbers stay up. A backtester's job isn't to confirm your idea — it's to kill it before the market does.</p>
+    </section>
 
-<!-- ── FORM ── -->
-<div class="form-section" id="request">
-    <div class="section-label reveal">Get started</div>
-    <h2 class="section-title reveal" data-delay="1">Tell me what you need</h2>
-    <p class="section-sub reveal" data-delay="2">Describe your project. I'll reply within 24 hours with a quote.</p>
-    <form id="project-form" class="request-form reveal" data-delay="3"
-          action="https://formspree.io/f/mnjkgbkn" method="POST">
-        <div class="form-grid">
-            <div class="form-field">
-                <label for="f-name">Your name</label>
-                <input type="text" id="f-name" name="name" placeholder="Jordan Rivera" required>
+    <!-- ── SERVICES ── -->
+    <section id="services">
+        <div class="sec-head"><span class="sec-num">02</span><h2>What I build for clients</h2></div>
+        <p class="sec-sub">Everything I build is yours — code handed over in full, no black-box SaaS you depend on forever.</p>
+
+        <div class="svc">
+            <div class="svc-row">
+                <div class="row-num">01</div>
+                <div>
+                    <h3>Trading tools</h3>
+                    <p>Market scanners, signal bots with Telegram alerts, trade-journal automation, backtesters that refuse a negative edge. Built around how you actually trade.</p>
+                </div>
+                <div class="svc-price">MOST LAND<br><b>$1,500 – 3,000</b></div>
             </div>
-            <div class="form-field">
-                <label for="f-email">Your email</label>
-                <input type="email" id="f-email" name="email" placeholder="alex@company.com" required>
+            <div class="svc-row">
+                <div class="row-num">02</div>
+                <div>
+                    <h3>Automation pipelines</h3>
+                    <p>The copy-paste around your judgment calls, automated: research, reporting, data extraction — running on a schedule, delivered to Telegram, Slack, or email.</p>
+                </div>
+                <div class="svc-price">FROM<br><b>$800</b></div>
             </div>
-            <div class="form-field form-full">
-                <label for="f-desc">What do you want built?</label>
-                <textarea id="f-desc" name="description"
-                    placeholder="E.g. A bot that watches my three setups on the 15m, pings my Telegram with entry/stop/size, and logs every trade to a journal automatically..." required></textarea>
-            </div>
-            <div class="form-field">
-                <label for="f-budget">Budget</label>
-                <select id="f-budget" name="budget">
-                    <option value="under-1k">Under $1,000</option>
-                    <option value="1k-3k" selected>$1,000 – $3,000</option>
-                    <option value="3k-6k">$3,000 – $6,000</option>
-                    <option value="6k+">$6,000+</option>
-                </select>
-            </div>
-            <div class="form-field form-submit">
-                <button type="submit" class="btn btn-primary">Send request →</button>
+            <div class="svc-row">
+                <div class="row-num">03</div>
+                <div>
+                    <h3>Private AI assistants</h3>
+                    <p>An assistant that knows your business, your docs, your workflows — running locally or on your server. Your data never leaves.</p>
+                </div>
+                <div class="svc-price">SCOPED<br><b>PER BUILD</b></div>
             </div>
         </div>
-    </form>
-    <div id="form-success" class="form-success">
-        <div class="success-icon">✓</div>
-        <h3>Request received!</h3>
-        <p>I'll review your project and reply within 24 hours.</p>
-    </div>
+
+        <div class="terms">TERMS — <b>fixed price only</b> · $800 floor · <b>50% to start, 50% when you see it running</b> · most builds ship in 2–4 weeks · scope in writing before code · <b>you own the code</b> · two builds at a time</div>
+    </section>
+
+    <!-- ── PROCESS ── -->
+    <section id="process">
+        <div class="sec-head"><span class="sec-num">03</span><h2>How it works</h2></div>
+        <div class="steps">
+            <div class="step">
+                <div class="n">STEP 01</div>
+                <h3>A 30-minute call</h3>
+                <p>You walk me through how you do it today. I tell you what's buildable, what it costs, and what I'd skip. If it's not worth building, I'll say that on the call.</p>
+            </div>
+            <div class="step">
+                <div class="n">STEP 02</div>
+                <h3>A fixed quote, in writing</h3>
+                <p>Scope and price on paper within 24 hours. The price holds for 30 days. Nothing starts until you've approved it and the deposit is in.</p>
+            </div>
+            <div class="step">
+                <div class="n">STEP 03</div>
+                <h3>Build &amp; handoff</h3>
+                <p>Weekly updates while I build. You see it running before the final 50% is due. Then full code handoff — it's yours forever, no subscription to me.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── STRAIGHT ANSWERS ── -->
+    <section id="answers">
+        <div class="sec-head"><span class="sec-num">04</span><h2>Straight answers</h2></div>
+        <div class="qa">
+            <div class="qa-item">
+                <h3>Will it make me money?</h3>
+                <p>No — and walk away from anyone who says yes. What I build is your rules, executed without you staring at charts, plus a backtest that tells you honestly whether those rules have an edge. If the numbers say no, you find out for the cost of a build, not the cost of an account.</p>
+            </div>
+            <div class="qa-item">
+                <h3>Have your own bots made you money?</h3>
+                <p>Not yet, and I say that out loud — my journal holds one open trade and zero resolved, so the edge isn't even measured. That's the point of the tooling: find out cheaply, on paper, instead of finding out with size. I sell the measurement, not the outcome. If someone tells you their bot prints money, ask for the journal.</p>
+            </div>
+            <div class="qa-item">
+                <h3>You have no reviews. Why trust you?</h3>
+                <p>Fair. Everything I've shipped is on this page — that's the track record I have. The structure covers the rest: scope in writing before code, half up front, and you see it working before the second half is due.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FORM ── -->
+    <section id="request">
+        <div class="sec-head"><span class="sec-num">05</span><h2>Tell me what you need</h2></div>
+        <p class="sec-sub">Describe the workflow you want automated. I'll reply within 24 hours with a fixed quote.</p>
+        <form id="project-form" class="request-form" action="https://formspree.io/f/mnjkgbkn" method="POST">
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="f-name">Your name</label>
+                    <input type="text" id="f-name" name="name" placeholder="Jordan Rivera" required>
+                </div>
+                <div class="form-field">
+                    <label for="f-email">Your email</label>
+                    <input type="email" id="f-email" name="email" placeholder="you@wherever.com" required>
+                </div>
+                <div class="form-field form-full">
+                    <label for="f-desc">What do you want built?</label>
+                    <textarea id="f-desc" name="description"
+                        placeholder="E.g. A bot that watches my three setups on the 15m, pings my Telegram with entry/stop/size, and logs every trade to a journal automatically..." required></textarea>
+                </div>
+                <div class="form-field">
+                    <label for="f-budget">Budget</label>
+                    <select id="f-budget" name="budget">
+                        <option value="under-1k">Under $1,000</option>
+                        <option value="1k-3k" selected>$1,000 – $3,000</option>
+                        <option value="3k-6k">$3,000 – $6,000</option>
+                        <option value="6k+">$6,000+</option>
+                    </select>
+                </div>
+                <div class="form-field form-submit">
+                    <button type="submit" class="btn">Send request →</button>
+                </div>
+            </div>
+            <p class="form-privacy">I only use what you type here to reply to you — nothing else. <a href="privacy.html">Privacy policy</a>.</p>
+        </form>
+        <div id="form-success" class="form-success">
+            <h3>Request received</h3>
+            <p>I'll read it properly and reply within 24 hours — with a number, not a sales pitch.</p>
+        </div>
+    </section>
 </div>
 
 <footer>
-    <p>© 2026 Xela · Custom AI Development · <a href="mailto:getxela@gmail.com">getxela@gmail.com</a></p>
+    <div class="sheet foot">
+        <div>© 2026 XELA · <a href="mailto:getxela@gmail.com">getxela@gmail.com</a> · <a href="privacy.html">PRIVACY</a></div>
+        <div>HAND-WRITTEN HTML, NO FRAMEWORK — VIEW SOURCE</div>
+        <div>NO COOKIES · NO TRACKING · NO THIRD-PARTY REQUESTS</div>
+    </div>
 </footer>
 
 <script>
 (function () {
-
-    // ── Reveal on scroll ──────────────────────────────
-    const revealObs = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-            if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
-        });
-    }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
-    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-
-    // ── Nav ───────────────────────────────────────────
-    const nav = document.getElementById('main-nav');
-    window.addEventListener('scroll', () => {
-        nav.classList.toggle('scrolled', window.scrollY > 50);
-        updateProcess();
-        updateBots();
-    }, { passive: true });
-
-    // ── Hero glow parallax ────────────────────────────
-    const heroGlow = document.getElementById('hero-glow');
-    window.addEventListener('scroll', () => {
-        const y = window.scrollY;
-        if (y < window.innerHeight * 1.5)
-            heroGlow.style.transform = `translate(-50%, calc(-50% + ${y * 0.2}px))`;
-    }, { passive: true });
-
-    // ── Counter animation ─────────────────────────────
-    function animateCount(el) {
-        const target = parseInt(el.dataset.count);
-        const suffix = el.dataset.suffix || '';
-        const dur = 1600; const t0 = performance.now();
-        const tick = (now) => {
-            const p = Math.min((now - t0) / dur, 1);
-            const ease = 1 - Math.pow(1 - p, 4);
-            el.textContent = Math.round(ease * target) + suffix;
-            if (p < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-    }
-    const statsObs = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-            if (e.isIntersecting) {
-                e.target.querySelectorAll('[data-count]').forEach(animateCount);
-                statsObs.unobserve(e.target);
-            }
-        });
-    }, { threshold: 0.6 });
-    const statsEl = document.querySelector('.hero-stats');
-    if (statsEl) statsObs.observe(statsEl);
-
-    // ── Bots cinematic scroll ─────────────────────────
-    const botsWrap = document.getElementById('bots-wrapper');
-    const botPanels = Array.from(document.querySelectorAll('.bot-panel'));
-    const botDots = Array.from(document.querySelectorAll('.bots-rail-dot'));
-    const NB = botPanels.length;
-    let lastBot = -1;
-    const bclamp = (v, a, b) => Math.max(a, Math.min(b, v));
-    const bsmooth = t => t * t * (3 - 2 * t);
-    const bseg = (sp, a, b) => bsmooth(bclamp((sp - a) / (b - a), 0, 1));
-    function updateBots() {
-        if (!botsWrap || window.innerWidth < 768) return;
-        const rect = botsWrap.getBoundingClientRect();
-        const scrollable = botsWrap.offsetHeight - window.innerHeight;
-        const progress = bclamp(-rect.top / scrollable, 0, 0.99999);
-        const segLen = 1 / NB;
-        let idx = Math.floor(progress / segLen);
-        if (idx >= NB) idx = NB - 1;
-        const sp = bclamp((progress - idx * segLen) / segLen, 0, 1);
-        if (idx !== lastBot) {
-            botPanels.forEach((p, i) => p.classList.toggle('active', i === idx));
-            botDots.forEach((d, i) => d.classList.toggle('active', i === idx));
-            lastBot = idx;
-        }
-        const p = botPanels[idx];
-        if (!p) return;
-        const tileP = bseg(sp, 0.00, 0.38);
-        const headP = bseg(sp, 0.12, 0.50);
-        const descP = bseg(sp, 0.40, 0.75);
-        const tagP  = bseg(sp, 0.60, 0.90);
-        p.style.setProperty('--tileO', tileP.toFixed(3));
-        p.style.setProperty('--tileS', (0.82 + 0.18 * tileP).toFixed(3));
-        p.style.setProperty('--tileY', (30 - 30 * tileP).toFixed(1) + 'px');
-        p.style.setProperty('--headO', headP.toFixed(3));
-        p.style.setProperty('--headY', (10 - 10 * headP).toFixed(1) + 'px');
-        p.style.setProperty('--descO', descP.toFixed(3));
-        p.style.setProperty('--descY', (-34 + 34 * descP).toFixed(1) + 'px');
-        p.style.setProperty('--tagO', tagP.toFixed(3));
-        p.style.setProperty('--tagY', (-16 + 16 * tagP).toFixed(1) + 'px');
-    }
-
-    // ── Process sticky ────────────────────────────────
-    const processWrapper = document.getElementById('process-wrapper');
-    const bigNum = document.getElementById('process-big-num');
-    const dots = [0,1,2].map(i => document.getElementById('dot-' + i));
-    const stepEls = [0,1,2].map(i => document.getElementById('step-' + i));
-    let lastStep = -1;
-    function updateProcess() {
-        if (!processWrapper || window.innerWidth < 768) return;
-        const rect = processWrapper.getBoundingClientRect();
-        const scrollable = processWrapper.offsetHeight - window.innerHeight;
-        const progress = Math.max(0, Math.min(0.9999, -rect.top / scrollable));
-        const active = Math.floor(progress * 3);
-        if (active === lastStep) return;
-        lastStep = active;
-        if (bigNum) bigNum.textContent = String(active + 1).padStart(2, '0');
-        dots.forEach((d,i) => d?.classList.toggle('active', i === active));
-        stepEls.forEach((s,i) => s?.classList.toggle('active', i === active));
-    }
-
-    // ── Smooth anchor scroll ──────────────────────────
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', e => {
-            const target = document.querySelector(a.getAttribute('href'));
-            if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
-        });
-    });
-
-    // ── Form ──────────────────────────────────────────
     const form = document.getElementById('project-form');
     const successEl = document.getElementById('form-success');
     if (form) {
@@ -663,10 +545,6 @@
             }
         });
     }
-
-    updateProcess();
-    updateBots();
-    window.addEventListener('resize', () => { lastBot = -1; updateBots(); }, { passive: true });
 })();
 </script>
 
