@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--
+  INTERNAL NOTES (delete before sending this link to a customer):
+  1. Fill every [BRACKETED] placeholder after Day 5 of business/02-14-day-plan.md —
+     the headline task and the price come from the customer conversations, not from us.
+  2. This page is in English. Danish SMB owners buy in Danish — make a Danish version
+     before any cold outreach (offer/da/index.html).
+  3. Card payments: add a Stripe Payment Link here once the CVR exists (Day 9).
+     Until then: bank transfer + MobilePay, which is what Danish SMBs expect anyway.
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xela — [The task you hate], made automatic. Fixed price.</title>
+<meta name="description" content="We automate the repetitive task your business wastes hours on. Fixed price from 3,000 DKK, half up front, working in two weeks. You own the result.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23f6f3ec'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-weight='bold' font-size='42' fill='%231a1913'%3EX%3C/text%3E%3Ccircle cx='52' cy='44' r='5' fill='%230a7a3d'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+        --paper: #f6f3ec;
+        --ink: #1a1913;
+        --ink-soft: #4c493f;
+        --ink-faint: #8a8577;
+        --rule: rgba(26,25,19,0.16);
+        --rule-strong: rgba(26,25,19,0.55);
+        --green: #0a7a3d;
+        --serif: 'Fraunces', Georgia, serif;
+        --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    }
+    ::selection { background: var(--green); color: var(--paper); }
+    body {
+        font-family: var(--serif);
+        background: var(--paper);
+        color: var(--ink);
+        line-height: 1.65;
+        font-size: 17px;
+        -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a:hover { color: var(--green); }
+    .sheet { max-width: 720px; margin: 0 auto; padding: 0 1.5rem; }
+    .mono { font-family: var(--mono); }
+    .up { text-transform: uppercase; letter-spacing: 0.08em; }
+
+    header { border-bottom: 2px solid var(--rule-strong); }
+    .masthead {
+        display: flex; justify-content: space-between; align-items: baseline;
+        gap: 1rem; flex-wrap: wrap;
+        padding: 1.1rem 0 0.9rem;
+        font-family: var(--mono); font-size: 0.78rem;
+        text-transform: uppercase; letter-spacing: 0.08em;
+        color: var(--ink-soft);
+    }
+    .masthead .brand { font-weight: 600; color: var(--ink); font-size: 0.85rem; }
+    .masthead .brand em { font-style: normal; color: var(--green); }
+    .masthead a { text-decoration: none; border-bottom: 1px solid var(--rule); }
+
+    .hero { padding: 4rem 0 3rem; border-bottom: 1px solid var(--rule); }
+    .kicker {
+        font-family: var(--mono); font-size: 0.72rem; font-weight: 500;
+        text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-faint);
+        margin-bottom: 1.4rem;
+    }
+    h1 { font-size: clamp(1.9rem, 5vw, 2.9rem); line-height: 1.15; font-weight: 400; margin-bottom: 1.2rem; }
+    h1 b { color: var(--green); font-weight: 600; }
+    .lede { color: var(--ink-soft); max-width: 34em; }
+
+    section { padding: 2.6rem 0; border-bottom: 1px solid var(--rule); }
+    h2 {
+        font-family: var(--mono); font-size: 0.78rem; font-weight: 600;
+        text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-faint);
+        margin-bottom: 1.3rem;
+    }
+    ul.plain { list-style: none; }
+    ul.plain li { padding: 0.55rem 0 0.55rem 1.6rem; position: relative; border-bottom: 1px dotted var(--rule); }
+    ul.plain li::before { content: '—'; position: absolute; left: 0; color: var(--green); }
+
+    .price-row { display: flex; gap: 2.5rem; flex-wrap: wrap; align-items: baseline; }
+    .price-big { font-size: clamp(1.6rem, 4vw, 2.2rem); }
+    .price-big b { color: var(--green); font-weight: 600; }
+    .price-terms { font-family: var(--mono); font-size: 0.78rem; color: var(--ink-soft); line-height: 2; }
+
+    ol.steps { list-style: none; counter-reset: step; }
+    ol.steps li { counter-increment: step; padding: 0.7rem 0 0.7rem 2.6rem; position: relative; border-bottom: 1px dotted var(--rule); }
+    ol.steps li::before {
+        content: counter(step, decimal-leading-zero);
+        position: absolute; left: 0; top: 0.85rem;
+        font-family: var(--mono); font-size: 0.75rem; font-weight: 600; color: var(--green);
+    }
+    .pay { font-family: var(--mono); font-size: 0.85rem; line-height: 2.1; }
+    .pay b { color: var(--ink); }
+
+    .contact-big { font-size: clamp(1.2rem, 3.5vw, 1.6rem); }
+    footer { padding: 1.4rem 0 2.5rem; font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-faint); }
+    footer a { text-decoration: none; border-bottom: 1px solid var(--rule); }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="sheet masthead">
+        <span class="brand">XELA <em>/</em> AUTOMATION</span>
+        <span><a href="../index.html">TRADING TOOLS</a></span>
+        <span><a href="mailto:getxela@gmail.com">getxela@gmail.com</a></span>
+    </div>
+</header>
+
+<main class="sheet">
+
+    <div class="hero">
+        <p class="kicker">Fixed-price automation for small businesses · Denmark</p>
+        <h1>We make <b>[the task you hate]</b> automatic.</h1>
+        <p class="lede">Quote follow-ups, booking reminders, invoice chasing, review replies —
+        the twenty minutes you lose ten times a week. We build the thing that does it for you,
+        show it to you working, and hand it over. No subscription. No platform. You own it.</p>
+    </div>
+
+    <section>
+        <h2>What you get</h2>
+        <ul class="plain">
+            <li>A tool that does <b>[the task]</b> automatically, running on your accounts and your machines.</li>
+            <li>Scope and price on paper before anything starts. The price doesn't move after that.</li>
+            <li>Working software in <b>two weeks</b>, demonstrated on your real work — not a slide about it.</li>
+            <li>You own the result outright. If we disappear tomorrow, it keeps running.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Price</h2>
+        <div class="price-row">
+            <div class="price-big">From <b>3,000 DKK</b>, fixed.</div>
+            <div class="price-terms up">
+                Half up front · half when you see it working<br>
+                Delivered in 2 weeks · scope in writing first
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>How it works</h2>
+        <ol class="steps">
+            <li>A 20-minute chat about the task. If we can't automate it, we say so and leave.</li>
+            <li>You get one page: what it does, what it costs, when it's done.</li>
+            <li>You pay half. We build. You see it half-done within a week.</li>
+            <li>It runs on your real work while you watch. You pay the rest.</li>
+        </ol>
+    </section>
+
+    <section>
+        <h2>Paying</h2>
+        <p class="pay">
+            Invoice · bank transfer, or<br>
+            MobilePay · <b>[NUMBER]</b><br>
+            Half on approval of the one-page scope, half on delivery.
+        </p>
+    </section>
+
+    <section>
+        <h2>Talk to us</h2>
+        <p class="contact-big">
+            <a href="mailto:getxela@gmail.com">getxela@gmail.com</a><br>
+            <span class="mono">[PHONE]</span>
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    <div class="sheet">© 2026 XELA · <a href="mailto:getxela@gmail.com">getxela@gmail.com</a> · <a href="../privacy.html">PRIVACY</a></div>
+</footer>
+
+</body>
+</html>
